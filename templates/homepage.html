@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<br> 
+
+<div class="container">
+        
+   <h2>{{ data[0]['name'] }}</h2>
+   <br>
+   <img src="{{ data[0]['image_link'] }}">
+   <br><br><br>
+   <div class="key">
+        <p><b>Key:</b>  0 = Never,  1 = Once in a while,  2 = Occasionally,  3 = Sometimes,  4 = Usually,  5 = Always</p>
+    </div>
+   <br>
+   <b>Good with children:</b> {{ data[0]['good_with_children']}}
+   <br>
+   <b>Good with other dogs:</b> {{ data[0]['good_with_other_dogs']}}
+   <br>
+   <b>Barking:</b> {{ data[0]['barking'] }}
+   <br>
+   <b>Shedding:</b> {{ data[0]['shedding'] }}
+   <br>
+   <b>Grooming:</b> {{ data[0]['grooming'] }}
+   <br>
+   <b>Drooling:</b> {{ data[0]['drooling'] }}
+   <br>
+   <b>Energy:</b> {{ data[0]['energy'] }}
+   <br>
+   <b>Trainability:</b> {{ data[0]['trainability'] }}
+   <br>
+   <b>Protectiveness:</b> {{ data[0]['protectiveness'] }}
+   <br>
+   <b>Maximum life expectancy:</b> {{ data[0]['max_life_expectancy'] }} years
+   <br>
+   <b>Maximum height (male):</b> {{ data[0]['max_height_male'] }} inches
+   <br>
+   <b>Maximum height (female):</b> {{ data[0]['max_height_female'] }} inches
+   <br>
+   <b>Maximum weight (male):</b> {{ data[0]['max_weight_male'] }} lbs
+   <br>
+   <b>Maximum weight (female):</b> {{ data[0]['max_weight_female'] }} lbs
+   <br>
+   <br>
+
+   
+   
+</div>
+
+
+
+
+
+
+{% endblock %}
