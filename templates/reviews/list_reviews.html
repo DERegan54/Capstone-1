@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %} Reviews {% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <h1>Breed Reviews</h1>
+    <div class="key">
+        <h3><b>Key:</b>  0 = Never/Least - 3 = Sometimes/Some - 5 = Always/Most</h3>
+    </div>
+
+   {% for review in reviews %}
+   
+    <br><br>
+    <p> 
+        <b>Breed:</b>{{ review.breed_name }}
+        <b>Maintenance Rating:</b>{{ review.maintenance_rating }}
+        <br><br>
+        <b>Behavior Rating:</b>{{ review.behavior_rating }}
+        <br><br>
+        <b>trainability_rating:</b>{{ review.trainability_rating }}
+        <br><br>
+        <b>Comments:</b>{{ review.comments }}    
+    </p>
+    {% endfor %}
+</div>
+
+{% endblock %}

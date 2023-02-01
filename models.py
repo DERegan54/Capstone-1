@@ -1,6 +1,7 @@
 from flask_bcrypt import Bcrypt
 from flask_sqlalchemy import SQLAlchemy
 
+
 db = SQLAlchemy()
 bcrypt = Bcrypt()
 
@@ -10,7 +11,11 @@ def connect_db(app):
     db.app = app
     db.init_app(app)
 
-##########################################################
+
+############################################################################
+# MODELS:
+############################################################################
+
 
 class User (db.Model):
     """Model that creates instances of users."""
@@ -23,7 +28,7 @@ class User (db.Model):
     profile_photo = db.Column(db.String)
     email = db.Column(db.String, nullable=False)
     family_members_adults = db.Column(db.Integer)
-    family_members_kids = db.Column(db.Integer)
+    family_members_children = db.Column(db.Integer)
     other_pets = db.Column(db.String)
     environment = db.Column(db.String)
     experience_level = db.Column(db.String)
@@ -33,9 +38,8 @@ class User (db.Model):
 
     @classmethod
     def signup(cls, username, password, email):
-        """ Sign up user.
-            Hashes password and adds user to database.
-        """
+        """ Sign up user. Hashes password and adds user to database."""
+
         hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
 
         user = User(
@@ -44,8 +48,31 @@ class User (db.Model):
             email=email
         )
         db.session.add(user)
+        db.session.commit()
         return user
+    
+    @classmethod
+    def update_profile(cls, username, password, email, profile_photo, family_members_adults, 
+                       family_members_children, other_pets, environment, experience_level):
+        """ Update user profile and hashes password and adds user to database."""
 
+        hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
+
+        user = User(
+            username=username,
+            password=hashed_pwd,
+            email=email,
+            profile_photo=profile_photo,
+            family_members_adults=family_members_adults,
+            family_members_children=family_members_children,
+            other_pets=other_pets,
+            environment=environment,
+            experience_level=experience_level
+        )
+        db.session.add(user)
+        
+        return user
+            
     @classmethod
     def authenticate(cls, username, password):
         """Find user with 'username' and 'password'.
@@ -69,33 +96,31 @@ class Breed (db.Model):
     __tablename__ = 'breeds'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
-    breed_name = db.Column(db.String, unique=True, nullable=False)    
-    image_url= db.Column(db.String)
-
-
-
-class Characteristic (db.Model):
-    """Model that creates instances of dog characteristics."""
-
-    __tablename__ = 'characteristics'
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
-    good_with_children= db.Column(db.Integer)
+    image_link = db.Column(db.String)
+    good_with_children = db.Column(db.Integer)
     good_with_other_dogs = db.Column(db.Integer)
     shedding = db.column(db.Integer)
-    drooling = db.column(db.Integer)
-    grooming = db.column(db.Integer)
-    protectiveness = db.column(db.Integer)
-    trainability = db.column(db.Integer)
+    coat_length = db.Column(db.Integer)
+    trainability = db.Column(db.Integer)
+    barking = db.Column(db.Integer)
+    min_life_expectancy = db.Column(db.Integer)
+    max_life_expectancy = db.Column(db.Integer)
+    max_height_male = db.Column(db.Integer)
+    max_height_female = db.Column(db.Integer)
+    max_weight_male = db.Column(db.Integer)
+    max_weight_female = db.Column(db.Integer)
+    min_height_male = db.Column(db.Integer)
+    min_height_female = db.Column(db.Integer)
+    min_weight_male = db.Column(db.Integer)
+    min_weight_female = db.Column(db.Integer)
+    grooming = db.Column(db.Integer)
+    drooling = db.Column(db.Integer)
+    good_with_strangers = db.Column(db.Integer)
+    playfulness = db.Column(db.Integer)
+    protectiveness = db.Column(db.Integer)
     energy = db.column(db.Integer)
-    barking = db.column(db.Integer)
-    max_life_expectancy = db.column(db.Integer)
-    max_height_male = db.column(db.Integer)
-    max_height_female = db.column(db.Integer)
-    max_weight_male = db.column(db.Integer)
-    max_weight_female = db.column(db.Integer)
-
-
+    name = db.Column(db.String, unique=True, nullable=False)    
+    
 
 class Review (db.Model):
     """Model that creates instances of dog breed reviews."""
@@ -103,6 +128,7 @@ class Review (db.Model):
     __tablename__ = 'reviews'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
+    breed_name = db.column(db.String)
     maintenance_rating = db.Column(db.Integer, nullable=False)
     behavior_rating = db.Column(db.Integer, nullable=False)
     trainability_rating = db.Column(db.Integer, nullable=False)
@@ -114,57 +140,20 @@ class Review (db.Model):
     breeds = db.relationship('Breed', single_parent=True, backref='reviews', cascade='all, delete-orphan')
 
 
-class Favorite_breed (db.Model):
+
+class Favorite (db.Model):
     """Model that creates instances of breeds that the user is considering."""
 
-    __tablename__ = 'favorite_breeds'
+    __tablename__ = 'favorites'
 
-    id = db.Column(db.Integer, primary_key=True, autoincrement = True, nullable=False)
-    breed_id = db.Column(db.Integer, db.ForeignKey('breeds.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    breed_id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer,  primary_key=True)
 
-    breeds = db.relationship('Breed', single_parent=True, backref='favorite_breeds', cascade='all, delete-orphan')
-    users = db.relationship('User', single_parent=True, backref='favorite_breeds', cascade='all, delete-orphan')
+    breeds = db.relationship('Breed', db.ForeignKey('breeds.id'), single_parent=True, backref='favorites', cascade='all, delete-orphan')
+    users = db.relationship('User', db.ForeignKey('users.id'), single_parent=True, backref='favorites', cascade='all, delete-orphan')
 
-
-
-class Breed_characteristic (db.Model):
-    """Model to create instances of characteristics on a dog breed."""
-
-    __tablename__ = 'breed_characteristics'
-
-    id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
-    breed_id = db.Column(db.Integer, db.ForeignKey('breeds.id', ondelete='cascade'))
-    characteristic_id = db.Column(db.Integer,db.ForeignKey('characteristics.id'))
-
-    breeds = db.relationship('Breed', single_parent=True, backref='breed_characteristics', cascade='all, delete-orphan')
-    characteristics = db.relationship('Characteristic', single_parent=True, backref='breed_characteristics', cascade='all, delete-orphan') 
-    
-
-# class User_valued_characteristic (db.Model):
-#     """Model to create instances of breed characteristics that the user values."""
-
-#     __tablename__= 'user_valued_characteristics'
-
-#     id = db.Column(db.Integer, autoincrement=True, nullable=False)
-#     value_rating = db.Column(db.Integer, nullable=False)
-#     user_id = db.Column(db.Integer, ForeignKey=('users'), ondelete='CASCADE')
-#     characteristc_id = db.Column(db.Integer, ForeignKey=('breed_characteristics'))
-
-#     users = db.relationship('User', backref='user_valued_characteristics', cascade='all, delete-orphan')
-
-# class Dog_in_home (db.Model): 
-#     """Model that creates instances of dogs already in user's home."""
-
-#     __tablename__ = 'dogs_in_home'
-
-#     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
-#     photo = db.Column(db.String)
-#     breed_id = db.Column(db.Integer, db.ForeignKey('breeds'))
-#     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'))
-    
-#     breeds = db.relationship('Breed', backref='dogs_in_home', cascade='all, delete-orphan')
-#     users = db.relationship('User', backref='dogs_in_home', cascade='all, delete-orphan')
+    # def __repr__(self):
+        # return f'<Favorites | User {self.user_id} | Breed {self.breed_id}>'
 
 
 

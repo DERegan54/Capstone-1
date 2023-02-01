@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %} User Profile {% endblock %}
+
+{% block content %}
+<!-- <i class="fa-solid fa-people-roof"></i> Family icon-->
+<!-- <i class="fa-solid fa-dog"></i> Dog icon
+<!-- <i class="fa-solid fa-cat"></i> <!-- Cat icon-->
+<!-- <i class="fa-solid fa-star"></i> Star icon -->
+
+<h1><b>{{ user.username }}</b></h1>
+<br><br>
+<p> 
+    <img src='{{ user.profile_photo }}'>
+    <br><br>
+    <b>Email:</b>{{ user.email }}
+    <br><br>
+    <b>Adults in household:</b>{{ user.family_members_adults }}
+    <br><br>
+    <b>Children in household:</b>{{ user.family_members_children }}
+    <br><br>
+    <b>Other pets in household:</b>{{ user.other_pets }}
+    <br><br>
+    <b>Home environment:</b>{{ user.environment }}
+    <br><br>
+    <b>Experience with dogs:</b>{{ user.experience_level }}
+</p>
+<a href="/user/edit"><button class="btn btn-secondary" type="submit">Edit Profile</button></a> 
+<form action="/user/delete" method="POST">
+    <a href="/user/delete"><button class="btn btn-secondary" type="submit">Delete User</button></a> 
+</form>
+
+
+
+{% endblock %}

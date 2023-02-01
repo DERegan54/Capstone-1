@@ -1,0 +1,154 @@
+{% extends 'base.html' %}
+
+{% block title %}Breeds Page 4{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Breeds - page 4:</h1>   
+    <h6>
+        <a href="/all_p1">page 1,</a>
+        <a href="/all_p2">page 2,</a>
+        <a href="/all_p3">page 3,</a>
+        <a href="/all_p4">page 4,</a>
+        <a href="/all_p5">page 5</a>
+    </h6>
+   
+    <br><br><br>
+    
+</div>
+<div>    
+    {% for i in response13 %}
+    <h2>{{ i['name'] }}</h2>
+    <br>
+    <img src="{{ i['image_link'] }}">
+    <br><br><br>
+    <b>Good with children:</b> {{ i['good_with_children'] }}
+    <br>
+    <b>Good with other dogs:</b> {{ i['good_with_other_dogs'] }}
+    <br>
+    <b>Barking:</b> {{ i['barking'] }}
+    <br>
+    <b>Shedding:</b> {{ i['shedding'] }}
+    <br>
+    <b>Coat Length:</b> {{ i['coat_length']}}
+    <br>
+    <b>Grooming:</b> {{ i['grooming'] }}
+    <br>
+    <b>Drooling:</b> {{ i['drooling'] }}
+    <br>
+    <b>Energy:</b> {{ i['energy'] }}
+    <br>
+    <b>Trainability:</b> {{ i['trainability'] }}
+    <br>
+    <b>Protectiveness:</b> {{ i['protectiveness'] }}
+    <br>
+    <b>Maximum life expectancy:</b> {{ i['max_life_expectancy'] }} years
+    <br>
+    <b>Maximum height (male):</b> {{ i['max_height_male'] }} inches
+    <br>
+    <b>Maximum height (female):</b> {{ i['max_height_female'] }} inches
+    <br>
+    <b>Maximum weight (male):</b> {{ i['max_weight_male'] }} lbs
+    <br>
+    <b>Maximum weight (female):</b> {{ i['max_weight_female'] }} lbs
+    <br><br>
+    <hr>
+    <br><br>
+   
+    <div class="key">
+        <h5><b>Key:</b>  0 = Never/Least - 3 = Sometimes/Some - 5 = Always/Most</h5>
+    </div>
+    {% endfor %} 
+    <br><br>
+</div>
+<div class="container">
+    {% for i in response14 %} 
+    <h2>{{ i['name'] }}</h2>
+    <br>
+    <img src="{{ i['image_link'] }}">
+    <br><br><br>
+    <b>Good with children:</b> {{ i['good_with_children'] }}
+    <br>
+    <b>Good with other dogs:</b> {{ i['good_with_other_dogs'] }}
+    <br>
+    <b>Barking:</b> {{ i['barking'] }}
+    <br>
+    <b>Shedding:</b> {{ i['shedding'] }}
+    <br>
+    <b>Coat Length:</b> {{ i['coat_length']}}
+    <br>
+    <b>Grooming:</b> {{ i['grooming'] }}
+    <br>
+    <b>Drooling:</b> {{ i['drooling'] }}
+    <br>
+    <b>Energy:</b> {{ i['energy'] }}
+    <br>
+    <b>Trainability:</b> {{ i['trainability'] }}
+    <br>
+    <b>Protectiveness:</b> {{ i['protectiveness'] }}
+    <br>
+    <b>Maximum life expectancy:</b> {{ i['max_life_expectancy'] }} years
+    <br>
+    <b>Maximum height (male):</b> {{ i['max_height_male'] }} inches
+    <br>
+    <b>Maximum height (female):</b> {{ i['max_height_female'] }} inches
+    <br>
+    <b>Maximum weight (male):</b> {{ i['max_weight_male'] }} lbs
+    <br>
+    <b>Maximum weight (female):</b> {{ i['max_weight_female'] }} lbs
+    <br><br>
+    <hr>
+    <br><br>
+    <div class="key">
+        <h5><b>Key:</b>  0 = Never/Least - 3 = Sometimes/Some - 5 = Always/Most</h5>
+    </div>
+    {% endfor %} 
+    <br><br>
+</div>
+<div class="container">
+    {% for i in response15 %} 
+    <h2>{{ i['name'] }}</h2>
+    <br>
+    <img src="{{ i['image_link'] }}">
+    <br><br><br>
+    <b>Good with children:</b> {{ i['good_with_children'] }}
+    <br>
+    <b>Good with other dogs:</b> {{ i['good_with_other_dogs'] }}
+    <br>
+    <b>Barking:</b> {{ i['barking'] }}
+    <br>
+    <b>Shedding:</b> {{ i['shedding'] }}
+    <br>
+    <b>Coat Length:</b> {{ i['coat_length']}}
+    <br>
+    <b>Grooming:</b> {{ i['grooming'] }}
+    <br>
+    <b>Drooling:</b> {{ i['drooling'] }}
+    <br>
+    <b>Energy:</b> {{ i['energy'] }}
+    <br>
+    <b>Trainability:</b> {{ i['trainability'] }}
+    <br>
+    <b>Protectiveness:</b> {{ i['protectiveness'] }}
+    <br>
+    <b>Maximum life expectancy:</b> {{ i['max_life_expectancy'] }} years
+    <br>
+    <b>Maximum height (male):</b> {{ i['max_height_male'] }} inches
+    <br>
+    <b>Maximum height (female):</b> {{ i['max_height_female'] }} inches
+    <br>
+    <b>Maximum weight (male):</b> {{ i['max_weight_male'] }} lbs
+    <br>
+    <b>Maximum weight (female):</b> {{ i['max_weight_female'] }} lbs
+    <br><br>
+    <hr>
+    <br><br>
+    
+    <div class="key">
+        <h5><b>Key:</b>  0 = Never/Least - 3 = Sometimes/Some - 5 = Always/Most</h5>
+    </div>
+    {% endfor %} 
+    <br><br>
+</div>
+   
+{% endblock %} 

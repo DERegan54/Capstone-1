@@ -1,0 +1,532 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+
+<!-- Search Form -->
+<div class="container">
+    <h1>Search By Breed Name:</h1>
+    
+    <div class="input-group mt-4">
+        <form action="/search">
+            <input type="text" placeholder="Enter a dog breed" name="breed_search"> 
+            <button type="submit">Go!</button>
+        </form>
+       
+    </div>
+    
+</div>
+
+
+   
+<!--   {% for i in response1 %}  -->
+    <!-- <p>
+       {{ i }}
+       {{ i['name'] }}<br>
+       {{ i['image_link'] }}<br>
+       {{ i['good_with_children'] }}<br>
+       {{ i['good_with_other_dogs'] }}<br>
+       {{ i['barking'] }}<br>
+       {{ i['shedding'] }}<br>
+       {{ i['coat_length']}}<br>
+       {{ i['grooming'] }}<br>
+       {{ i['drooling'] }}<br>
+       {{ i['energy'] }}<br>
+       {{ i['trainability'] }}<br>
+       {{ i['protectiveness'] }}
+       {{ i['max_life_expectancy'] }}<br>
+       {{ i['max_height_male'] }}<br>
+       {{ i['max_height_female'] }}<br>
+       {{ i['max_weight_male'] }}<br>
+       {{ i['max_weight_female'] }}<br>
+       {% endfor %} 
+    </p> -->
+    
+
+
+
+
+<div>
+    {% for i in response6 %} 
+    <h2>{{ i['name'] }}</h2>
+    <br>
+    <img src="{{ i['image_link'] }}">
+    <br><br><br>
+    <b>Good with children:</b> {{ i['good_with_children'] }}
+    <br>
+    <b>Good with other dogs:</b> {{ i['good_with_other_dogs'] }}
+    <br>
+    <b>Barking:</b> {{ i['barking'] }}
+    <br>
+    <b>Shedding:</b> {{ i['shedding'] }}
+    <br>
+    <b>Coat Length:</b> {{ i['coat_length']}}
+    <br>
+    <b>Grooming:</b> {{ i['grooming'] }}
+    <br>
+    <b>Drooling:</b> {{ i['drooling'] }}
+    <br>
+    <b>Energy:</b> {{ i['energy'] }}
+    <br>
+    <b>Trainability:</b> {{ i['trainability'] }}
+    <br>
+    <b>Protectiveness:</b> {{ i['protectiveness'] }}
+    <br>
+    <b>Maximum life expectancy:</b> {{ i['max_life_expectancy'] }} years
+    <br>
+    <b>Maximum height (male):</b> {{ i['max_height_male'] }} inches
+    <br>
+    <b>Maximum height (female):</b> {{ i['max_height_female'] }} inches
+    <br>
+    <b>Maximum weight (male):</b> {{ i['max_weight_male'] }} lbs
+    <br>
+    <b>Maximum weight (female):</b> {{ i['max_weight_female'] }} lbs
+    <br><br>
+    <hr>
+    <br><br>
+    {% endfor %} 
+</div>
+<div>
+    {% for i in response7 %} 
+    <h2>{{ i['name'] }}</h2>
+    <br>
+    <img src="{{ i['image_link'] }}">
+    <br><br><br>
+    <b>Good with children:</b> {{ i['good_with_children'] }}
+    <br>
+    <b>Good with other dogs:</b> {{ i['good_with_other_dogs'] }}
+    <br>
+    <b>Barking:</b> {{ i['barking'] }}
+    <br>
+    <b>Shedding:</b> {{ i['shedding'] }}
+    <br>
+    <b>Coat Length:</b> {{ i['coat_length']}}
+    <br>
+    <b>Grooming:</b> {{ i['grooming'] }}
+    <br>
+    <b>Drooling:</b> {{ i['drooling'] }}
+    <br>
+    <b>Energy:</b> {{ i['energy'] }}
+    <br>
+    <b>Trainability:</b> {{ i['trainability'] }}
+    <br>
+    <b>Protectiveness:</b> {{ i['protectiveness'] }}
+    <br>
+    <b>Maximum life expectancy:</b> {{ i['max_life_expectancy'] }} years
+    <br>
+    <b>Maximum height (male):</b> {{ i['max_height_male'] }} inches
+    <br>
+    <b>Maximum height (female):</b> {{ i['max_height_female'] }} inches
+    <br>
+    <b>Maximum weight (male):</b> {{ i['max_weight_male'] }} lbs
+    <br>
+    <b>Maximum weight (female):</b> {{ i['max_weight_female'] }} lbs
+    <br><br>
+    <hr>
+    <br><br>
+    {% endfor %} 
+</div>
+<div>
+    {% for i in response8 %} 
+    <h2>{{ i['name'] }}</h2>
+    <br>
+    <img src="{{ i['image_link'] }}">
+    <br><br><br>
+    <b>Good with children:</b> {{ i['good_with_children'] }}
+    <br>
+    <b>Good with other dogs:</b> {{ i['good_with_other_dogs'] }}
+    <br>
+    <b>Barking:</b> {{ i['barking'] }}
+    <br>
+    <b>Shedding:</b> {{ i['shedding'] }}
+    <br>
+    <b>Coat Length:</b> {{ i['coat_length']}}
+    <br>
+    <b>Grooming:</b> {{ i['grooming'] }}
+    <br>
+    <b>Drooling:</b> {{ i['drooling'] }}
+    <br>
+    <b>Energy:</b> {{ i['energy'] }}
+    <br>
+    <b>Trainability:</b> {{ i['trainability'] }}
+    <br>
+    <b>Protectiveness:</b> {{ i['protectiveness'] }}
+    <br>
+    <b>Maximum life expectancy:</b> {{ i['max_life_expectancy'] }} years
+    <br>
+    <b>Maximum height (male):</b> {{ i['max_height_male'] }} inches
+    <br>
+    <b>Maximum height (female):</b> {{ i['max_height_female'] }} inches
+    <br>
+    <b>Maximum weight (male):</b> {{ i['max_weight_male'] }} lbs
+    <br>
+    <b>Maximum weight (female):</b> {{ i['max_weight_female'] }} lbs
+    <br><br>
+    <hr>
+    <br><br>
+    {% endfor %} 
+</div>
+<div>
+    {% for i in response9 %} 
+    <h2>{{ i['name'] }}</h2>
+    <br>
+    <img src="{{ i['image_link'] }}">
+    <br><br><br>
+    <b>Good with children:</b> {{ i['good_with_children'] }}
+    <br>
+    <b>Good with other dogs:</b> {{ i['good_with_other_dogs'] }}
+    <br>
+    <b>Barking:</b> {{ i['barking'] }}
+    <br>
+    <b>Shedding:</b> {{ i['shedding'] }}
+    <br>
+    <b>Coat Length:</b> {{ i['coat_length']}}
+    <br>
+    <b>Grooming:</b> {{ i['grooming'] }}
+    <br>
+    <b>Drooling:</b> {{ i['drooling'] }}
+    <br>
+    <b>Energy:</b> {{ i['energy'] }}
+    <br>
+    <b>Trainability:</b> {{ i['trainability'] }}
+    <br>
+    <b>Protectiveness:</b> {{ i['protectiveness'] }}
+    <br>
+    <b>Maximum life expectancy:</b> {{ i['max_life_expectancy'] }} years
+    <br>
+    <b>Maximum height (male):</b> {{ i['max_height_male'] }} inches
+    <br>
+    <b>Maximum height (female):</b> {{ i['max_height_female'] }} inches
+    <br>
+    <b>Maximum weight (male):</b> {{ i['max_weight_male'] }} lbs
+    <br>
+    <b>Maximum weight (female):</b> {{ i['max_weight_female'] }} lbs
+    <br><br>
+    <hr>
+    <br><br>
+    {% endfor %} 
+</div>
+<div>
+    {% for i in response10 %} 
+    <h2>{{ i['name'] }}</h2>
+    <br>
+    <img src="{{ i['image_link'] }}">
+    <br><br><br>
+    <b>Good with children:</b> {{ i['good_with_children'] }}
+    <br>
+    <b>Good with other dogs:</b> {{ i['good_with_other_dogs'] }}
+    <br>
+    <b>Barking:</b> {{ i['barking'] }}
+    <br>
+    <b>Shedding:</b> {{ i['shedding'] }}
+    <br>
+    <b>Coat Length:</b> {{ i['coat_length']}}
+    <br>
+    <b>Grooming:</b> {{ i['grooming'] }}
+    <br>
+    <b>Drooling:</b> {{ i['drooling'] }}
+    <br>
+    <b>Energy:</b> {{ i['energy'] }}
+    <br>
+    <b>Trainability:</b> {{ i['trainability'] }}
+    <br>
+    <b>Protectiveness:</b> {{ i['protectiveness'] }}
+    <br>
+    <b>Maximum life expectancy:</b> {{ i['max_life_expectancy'] }} years
+    <br>
+    <b>Maximum height (male):</b> {{ i['max_height_male'] }} inches
+    <br>
+    <b>Maximum height (female):</b> {{ i['max_height_female'] }} inches
+    <br>
+    <b>Maximum weight (male):</b> {{ i['max_weight_male'] }} lbs
+    <br>
+    <b>Maximum weight (female):</b> {{ i['max_weight_female'] }} lbs
+    <br><br>
+    <hr>
+    <br><br>
+    {% endfor %} 
+</div>
+<div>
+    {% for i in response11 %} 
+    <h2>{{ i['name'] }}</h2>
+    <br>
+    <img src="{{ i['image_link'] }}">
+    <br><br><br>
+    <b>Good with children:</b> {{ i['good_with_children'] }}
+    <br>
+    <b>Good with other dogs:</b> {{ i['good_with_other_dogs'] }}
+    <br>
+    <b>Barking:</b> {{ i['barking'] }}
+    <br>
+    <b>Shedding:</b> {{ i['shedding'] }}
+    <br>
+    <b>Coat Length:</b> {{ i['coat_length']}}
+    <br>
+    <b>Grooming:</b> {{ i['grooming'] }}
+    <br>
+    <b>Drooling:</b> {{ i['drooling'] }}
+    <br>
+    <b>Energy:</b> {{ i['energy'] }}
+    <br>
+    <b>Trainability:</b> {{ i['trainability'] }}
+    <br>
+    <b>Protectiveness:</b> {{ i['protectiveness'] }}
+    <br>
+    <b>Maximum life expectancy:</b> {{ i['max_life_expectancy'] }} years
+    <br>
+    <b>Maximum height (male):</b> {{ i['max_height_male'] }} inches
+    <br>
+    <b>Maximum height (female):</b> {{ i['max_height_female'] }} inches
+    <br>
+    <b>Maximum weight (male):</b> {{ i['max_weight_male'] }} lbs
+    <br>
+    <b>Maximum weight (female):</b> {{ i['max_weight_female'] }} lbs
+    <br><br>
+    <hr>
+    <br><br>
+    {% endfor %} 
+</div>
+<div>
+    {% for i in response12 %} 
+    <h2>{{ i['name'] }}</h2>
+    <br>
+    <img src="{{ i['image_link'] }}">
+    <br><br><br>
+    <b>Good with children:</b> {{ i['good_with_children'] }}
+    <br>
+    <b>Good with other dogs:</b> {{ i['good_with_other_dogs'] }}
+    <br>
+    <b>Barking:</b> {{ i['barking'] }}
+    <br>
+    <b>Shedding:</b> {{ i['shedding'] }}
+    <br>
+    <b>Coat Length:</b> {{ i['coat_length']}}
+    <br>
+    <b>Grooming:</b> {{ i['grooming'] }}
+    <br>
+    <b>Drooling:</b> {{ i['drooling'] }}
+    <br>
+    <b>Energy:</b> {{ i['energy'] }}
+    <br>
+    <b>Trainability:</b> {{ i['trainability'] }}
+    <br>
+    <b>Protectiveness:</b> {{ i['protectiveness'] }}
+    <br>
+    <b>Maximum life expectancy:</b> {{ i['max_life_expectancy'] }} years
+    <br>
+    <b>Maximum height (male):</b> {{ i['max_height_male'] }} inches
+    <br>
+    <b>Maximum height (female):</b> {{ i['max_height_female'] }} inches
+    <br>
+    <b>Maximum weight (male):</b> {{ i['max_weight_male'] }} lbs
+    <br>
+    <b>Maximum weight (female):</b> {{ i['max_weight_female'] }} lbs
+    <br><br>
+    <hr>
+    <br><br>
+    {% endfor %} 
+</div>
+<div>
+    {% for i in response13 %} 
+    <h2>{{ i['name'] }}</h2>
+    <br>
+    <img src="{{ i['image_link'] }}">
+    <br><br><br>
+    <b>Good with children:</b> {{ i['good_with_children'] }}
+    <br>
+    <b>Good with other dogs:</b> {{ i['good_with_other_dogs'] }}
+    <br>
+    <b>Barking:</b> {{ i['barking'] }}
+    <br>
+    <b>Shedding:</b> {{ i['shedding'] }}
+    <br>
+    <b>Coat Length:</b> {{ i['coat_length']}}
+    <br>
+    <b>Grooming:</b> {{ i['grooming'] }}
+    <br>
+    <b>Drooling:</b> {{ i['drooling'] }}
+    <br>
+    <b>Energy:</b> {{ i['energy'] }}
+    <br>
+    <b>Trainability:</b> {{ i['trainability'] }}
+    <br>
+    <b>Protectiveness:</b> {{ i['protectiveness'] }}
+    <br>
+    <b>Maximum life expectancy:</b> {{ i['max_life_expectancy'] }} years
+    <br>
+    <b>Maximum height (male):</b> {{ i['max_height_male'] }} inches
+    <br>
+    <b>Maximum height (female):</b> {{ i['max_height_female'] }} inches
+    <br>
+    <b>Maximum weight (male):</b> {{ i['max_weight_male'] }} lbs
+    <br>
+    <b>Maximum weight (female):</b> {{ i['max_weight_female'] }} lbs
+    <br><br>
+    <hr>
+    <br><br>
+    {% endfor %} 
+</div>
+<div>
+    {% for i in response14 %} 
+    <h2>{{ i['name'] }}</h2>
+    <br>
+    <img src="{{ i['image_link'] }}">
+    <br><br><br>
+    <b>Good with children:</b> {{ i['good_with_children'] }}
+    <br>
+    <b>Good with other dogs:</b> {{ i['good_with_other_dogs'] }}
+    <br>
+    <b>Barking:</b> {{ i['barking'] }}
+    <br>
+    <b>Shedding:</b> {{ i['shedding'] }}
+    <br>
+    <b>Coat Length:</b> {{ i['coat_length']}}
+    <br>
+    <b>Grooming:</b> {{ i['grooming'] }}
+    <br>
+    <b>Drooling:</b> {{ i['drooling'] }}
+    <br>
+    <b>Energy:</b> {{ i['energy'] }}
+    <br>
+    <b>Trainability:</b> {{ i['trainability'] }}
+    <br>
+    <b>Protectiveness:</b> {{ i['protectiveness'] }}
+    <br>
+    <b>Maximum life expectancy:</b> {{ i['max_life_expectancy'] }} years
+    <br>
+    <b>Maximum height (male):</b> {{ i['max_height_male'] }} inches
+    <br>
+    <b>Maximum height (female):</b> {{ i['max_height_female'] }} inches
+    <br>
+    <b>Maximum weight (male):</b> {{ i['max_weight_male'] }} lbs
+    <br>
+    <b>Maximum weight (female):</b> {{ i['max_weight_female'] }} lbs
+    <br><br>
+    <hr>
+    <br><br>
+    {% endfor %} 
+</div>
+<div>
+    {% for i in response15 %} 
+    <h2>{{ i['name'] }}</h2>
+    <br>
+    <img src="{{ i['image_link'] }}">
+    <br><br><br>
+    <b>Good with children:</b> {{ i['good_with_children'] }}
+    <br>
+    <b>Good with other dogs:</b> {{ i['good_with_other_dogs'] }}
+    <br>
+    <b>Barking:</b> {{ i['barking'] }}
+    <br>
+    <b>Shedding:</b> {{ i['shedding'] }}
+    <br>
+    <b>Coat Length:</b> {{ i['coat_length']}}
+    <br>
+    <b>Grooming:</b> {{ i['grooming'] }}
+    <br>
+    <b>Drooling:</b> {{ i['drooling'] }}
+    <br>
+    <b>Energy:</b> {{ i['energy'] }}
+    <br>
+    <b>Trainability:</b> {{ i['trainability'] }}
+    <br>
+    <b>Protectiveness:</b> {{ i['protectiveness'] }}
+    <br>
+    <b>Maximum life expectancy:</b> {{ i['max_life_expectancy'] }} years
+    <br>
+    <b>Maximum height (male):</b> {{ i['max_height_male'] }} inches
+    <br>
+    <b>Maximum height (female):</b> {{ i['max_height_female'] }} inches
+    <br>
+    <b>Maximum weight (male):</b> {{ i['max_weight_male'] }} lbs
+    <br>
+    <b>Maximum weight (female):</b> {{ i['max_weight_female'] }} lbs
+    <br><br>
+    <hr>
+    <br><br>
+    {% endfor %} 
+</div>
+<div>
+    {% for i in response16 %} 
+    <h2>{{ i['name'] }}</h2>
+    <br>
+    <img src="{{ i['image_link'] }}">
+    <br><br><br>
+    <b>Good with children:</b> {{ i['good_with_children'] }}
+    <br>
+    <b>Good with other dogs:</b> {{ i['good_with_other_dogs'] }}
+    <br>
+    <b>Barking:</b> {{ i['barking'] }}
+    <br>
+    <b>Shedding:</b> {{ i['shedding'] }}
+    <br>
+    <b>Coat Length:</b> {{ i['coat_length']}}
+    <br>
+    <b>Grooming:</b> {{ i['grooming'] }}
+    <br>
+    <b>Drooling:</b> {{ i['drooling'] }}
+    <br>
+    <b>Energy:</b> {{ i['energy'] }}
+    <br>
+    <b>Trainability:</b> {{ i['trainability'] }}
+    <br>
+    <b>Protectiveness:</b> {{ i['protectiveness'] }}
+    <br>
+    <b>Maximum life expectancy:</b> {{ i['max_life_expectancy'] }} years
+    <br>
+    <b>Maximum height (male):</b> {{ i['max_height_male'] }} inches
+    <br>
+    <b>Maximum height (female):</b> {{ i['max_height_female'] }} inches
+    <br>
+    <b>Maximum weight (male):</b> {{ i['max_weight_male'] }} lbs
+    <br>
+    <b>Maximum weight (female):</b> {{ i['max_weight_female'] }} lbs
+    <br><br>
+    <hr>
+    <br><br>
+    {% endfor %} 
+</div>
+<div>
+    {% for i in response17 %} 
+    <h2>{{ i['name'] }}</h2>
+    <br>
+    <img src="{{ i['image_link'] }}">
+    <br><br><br>
+    <b>Good with children:</b> {{ i['good_with_children'] }}
+    <br>
+    <b>Good with other dogs:</b> {{ i['good_with_other_dogs'] }}
+    <br>
+    <b>Barking:</b> {{ i['barking'] }}
+    <br>
+    <b>Shedding:</b> {{ i['shedding'] }}
+    <br>
+    <b>Coat Length:</b> {{ i['coat_length']}}
+    <br>
+    <b>Grooming:</b> {{ i['grooming'] }}
+    <br>
+    <b>Drooling:</b> {{ i['drooling'] }}
+    <br>
+    <b>Energy:</b> {{ i['energy'] }}
+    <br>
+    <b>Trainability:</b> {{ i['trainability'] }}
+    <br>
+    <b>Protectiveness:</b> {{ i['protectiveness'] }}
+    <br>
+    <b>Maximum life expectancy:</b> {{ i['max_life_expectancy'] }} years
+    <br>
+    <b>Maximum height (male):</b> {{ i['max_height_male'] }} inches
+    <br>
+    <b>Maximum height (female):</b> {{ i['max_height_female'] }} inches
+    <br>
+    <b>Maximum weight (male):</b> {{ i['max_weight_male'] }} lbs
+    <br>
+    <b>Maximum weight (female):</b> {{ i['max_weight_female'] }} lbs
+    <br><br>
+    <hr>
+    <br><br>
+    {% endfor %} 
+</div>
+</div>
+{% endblock %}

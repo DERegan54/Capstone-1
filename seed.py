@@ -1,4 +1,4 @@
-from models import db, User, Breed, Characteristic, Review, Favorite_breed, Breed_characteristic
+from models import db, User, Breed,  Review, Favorite
 from app import app
 
 # Clear any old tables
