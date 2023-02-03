@@ -120,7 +120,9 @@ class Breed (db.Model):
     protectiveness = db.Column(db.Integer)
     energy = db.column(db.Integer)
     name = db.Column(db.String, unique=True, nullable=False)    
-    
+
+
+   
 
 class Review (db.Model):
     """Model that creates instances of dog breed reviews."""
@@ -136,24 +138,39 @@ class Review (db.Model):
     breed_id = db.Column(db.Integer, db.ForeignKey('breeds.id', ondelete='cascade'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'))
 
-    users = db.relationship('User', backref='reviews')
+    users = db.relationship('User', single_parent=True, backref='reviews', cascade='all, delete-orphan')
     breeds = db.relationship('Breed', single_parent=True, backref='reviews', cascade='all, delete-orphan')
 
+    @classmethod
+    def add_review(cls, breed_name, maintenance_rating, behavior_rating, trainability_rating, comments):
+        """ Adds breed review to database."""
 
+        review = Review(
+            breed_name=breed_name,
+            maintenance_rating=maintenance_rating,
+            behavior_rating = behavior_rating,
+            trainability_rating = trainability_rating,
+            comments=comments
+        )
+        db.session.add(review)
+        db.session.commit()
+        return review
+    
 
 class Favorite (db.Model):
     """Model that creates instances of breeds that the user is considering."""
 
     __tablename__ = 'favorites'
 
-    breed_id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer,  primary_key=True)
+    
+    breed_id = db.Column(db.Integer, db.ForeignKey('breeds.id', ondelete='cascade'), primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'), primary_key=True)
 
-    breeds = db.relationship('Breed', db.ForeignKey('breeds.id'), single_parent=True, backref='favorites', cascade='all, delete-orphan')
-    users = db.relationship('User', db.ForeignKey('users.id'), single_parent=True, backref='favorites', cascade='all, delete-orphan')
+    breeds = db.relationship('Breed', single_parent=True, backref='favorites', cascade='all, delete-orphan')
+    users = db.relationship('User', single_parent=True, backref='favorites', cascade='all, delete-orphan')
 
-    # def __repr__(self):
-        # return f'<Favorites | User {self.user_id} | Breed {self.breed_id}>'
+    def __repr__(self):
+        return f'<Favorites | User {self.user_id} | Breed {self.breed_id}>'
 
 
 

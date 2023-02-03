@@ -12,7 +12,7 @@ class Add_user_form(FlaskForm):
     username = StringField('Username:', validators=[InputRequired()])
     email = StringField('Email:', validators=[InputRequired(), Email()])
     password = PasswordField('Password:', validators=[InputRequired(), Length(min=6)])
-    profile_photo = StringField('Profile photo URL:', validators=[URL(), Optional()])   
+    # profile_photo = StringField('Profile photo URL:', validators=[URL(), Optional()])   
 
 class Login_Form(FlaskForm):
     """User login form."""
@@ -38,7 +38,6 @@ class Edit_profile_form(FlaskForm):
 class Breed_review_form(FlaskForm):
     """Form for submitting a breed review."""
 
-    breed_name = StringField('Breed name:', validators=[InputRequired()])
     maintenance_rating = SelectField('Maintenance Required:', choices=[(1), (2),(3), (4), (5)], validators=[InputRequired()])
     behavior_rating = SelectField('Obedience:', choices=[(1), (2), (3), (4), (5)], validators=[InputRequired()])
     trainability_rating = SelectField('Trainability:', choices=[(1), (2), (3), (4), (5)], validators=[InputRequired()])

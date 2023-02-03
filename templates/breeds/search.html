@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+
+
+<!-- Search Form -->
+<div class="container">
+    <h1>Search By Breed Name:</h1>
+    
+    <div class="input-group mt-4">
+        <form action="/search_results">
+            <input type="text" placeholder="Enter a dog breed" name="breed_search"> 
+            <button type="submit">Go!</button>
+        </form>
+       
+    </div>
+    
+</div>
+<br><br>
+{% endblock %} 

@@ -1,0 +1,18 @@
+{% extends 'user/user_profile.html' %}
+
+{% block content %} 
+
+<div class = container>
+    {% for i in user_favorites %} 
+    <h3>{{ i['name'] }}</h3>
+    <br><br>
+    <img src="{{ i['image_link'] }}">
+    <br><br>
+    <a href="/reviews/add_review"><button class="btn btn-secondary" type="submit">Review the {{ i['name'] }} breed</button></a> 
+    <br><br>
+
+    
+</div>
+
+
+{% endblock %} 

@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Breed{% endblock %}
 
 {% block content %}
 
-
-
-<div>
-    {% for i in data %} 
-    <h3>{{ i['name'] }}</h3>
+<h4>Search Results:</h4>
+<br><br>
+<div class="container">    
+    {% for i in data %}
+    <h2>{{ i['name'] }}</h2>
     <br>
     <a href="/reviews/add_review"><button class="btn btn-secondary" type="submit">Review the {{ i['name'] }} breed</button></a> 
     <form action="/breeds/{{ i['id'] }}/favorites" method="POST">
@@ -17,7 +17,7 @@
     </form>
     <br><br>
     <img src="{{ i['image_link'] }}">
-    <br><br><br>
+    <br><br>
     <div class="key">
         <h5><b>Key:</b>  0 = Never/Least - 3 = Sometimes/Some - 5 = Always/Most</h5>
     </div>
@@ -51,9 +51,9 @@
     <br>
     <b>Maximum weight (female):</b> {{ i['max_weight_female'] }} lbs
     <br><br>
-    
+    <hr>
+    <br><br>
     {% endfor %} 
-</div>
 
 
-{% endblock %} 
+{% endblock %}     

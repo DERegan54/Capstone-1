@@ -3,8 +3,9 @@ from flask_debugtoolbar import DebugToolbarExtension
 from secrets import API_KEY
 from sqlalchemy.exc import IntegrityError
 from forms import Add_user_form, Login_Form, Edit_profile_form, Breed_review_form
-from models import db, connect_db, User, Breed, Review 
+from models import db, connect_db, User, Breed, Review, Favorite 
 from user import login_user, logout_user
+from api_requests import add_breed_to_db, search_breeds
 import requests
 import json
 
@@ -23,57 +24,20 @@ connect_db(app)
 
 API_BASE_URL = 'https://api.api-ninjas.com/v1/dogs?'
 
+
 ###################################################################################
-# HOMEPAGE ROUTE
+# ROOT ROUTE
 ###################################################################################
 
 @app.route('/', methods=["GET"])
 def homepage():
     """Display search page."""
 
-    return render_template('home.html')
-
-
-###################################################################################
-# SEARCH ROUTE
-###################################################################################
-
-@app.route('/search', methods=["GET"])
-def search_breeds():
-    """Querys dogs API to get dog breed info."""
-
-    query = request.args.get('breed_search')
-
-    try:
-        url = f'{API_BASE_URL}name={query}'
-        response = requests.get(url, headers={'X-Api-Key': API_KEY})
-        data = response.json()
-
-        return render_template("breed.html", data=data)
-    except:
-        flash("Invalid search. Please enter a breed.", "danger") 
-        return redirect("/")
-
-
-###################################################################################
-# ADD BREED TO BREED_PICKER DATABASE ROUTE
-###################################################################################
-
-@app.route('/breed', methods=["GET", "POST"])
-def add_breed_to_database():
-    """Gets breed from dogs API and adds breed to breed_picker database."""
-
-    url = f'{API_BASE_URL}barking=1'     # Get first 20 records of dogs that bark the least (barking=1 endpoint)
+    url = f'{API_BASE_URL}name=labrador'
     response = requests.get(url, headers={'X-Api-Key': API_KEY})
     data = response.json()
-
-    data_breed = data[0]
-
-    breed = Breed(**data_breed)
-    db.session.add(breed)
-    db.session.commit()
-
-    return render_template('breed.html', data=data)
+       
+    return render_template('home.html', data=data)
 
 
 ####################################################################################
@@ -117,7 +81,7 @@ def signup():
 
         login_user(user)
         flash(f"Welcome, {user.username}! Profile successfully created.", 'info')
-        return redirect('/')
+        return redirect('/user')
 
     else:
         return render_template('user/signup.html', form=form)
@@ -161,7 +125,6 @@ def logout():
     return redirect("/login")
 
 
-
 ###################################################################################
 # USER PROFILE ROUTES
 ###################################################################################
@@ -170,19 +133,19 @@ def logout():
 def show_user_profile():
     """Show user profile page."""
 
+    # Issues:
+    # How do I display the list of the user's favorite breeds? 
+
     if not g.user:
         flash("Please login or sign up for an account.", "danger")
         return redirect('/')
 
     user = g.user
     
+    # favorites = g.user.favorites     
 
-    # favorite_breeds = 
-
-    # reviews = 
-
-    return render_template('user/user_profile.html', user=user)
-    #  favorite_breeds=favorite_breeds, reviews=reviews)
+    return render_template('user/my_profile.html', user=user)
+   
 
 
 @app.route('/user/edit', methods=["GET", "POST"])
@@ -232,213 +195,135 @@ def delete_user():
 
 
 ###################################################################################
-# BREED ROUTES
+# SEARCH ROUTES
 ###################################################################################
 
-@app.route('/all_p1', methods=["GET"])
-def all_dogs_p1():
-    """Display all dogs that bark at level 1."""
-    url = f'{API_BASE_URL}barking=1'                                # Get first 20 records of dogs that bark the least (barking=1 endpoint)
-    response = requests.get(url, headers={'X-Api-Key': API_KEY})
-    response_data = response.json()
-    response1 = response_data
+@app.route("/search", methods=["GET"])
+def show_search_page():
+    """Displays search page"""
 
-    if len(response1) == 20:                                           # If there are more than 20 records, get next 20 records of dogs that bark the least 
-        url = f'{API_BASE_URL}barking=1;offset=20'
-        response = requests.get(url, headers={'X-Api-Key': API_KEY})
-        response_data = response.json()
-        response2 = response_data
-        return render_template('/breeds/p1.html', response1=response1, response2=response2)
+    return render_template('breeds/search.html')
 
-@app.route('/all_p2', methods=["GET"])
-def all_dogs_p2():
-    """Display all dogs who bark at level 2."""    
-    url = f'{API_BASE_URL}barking=2;offset=0'
-    response = requests.get(url, headers={'X-Api-Key': API_KEY})
-    response_data = response.json()
-    response3 = response_data
 
-    if len(response3) == 20:
-        url = f'{API_BASE_URL}barking=2;offset=20'
-        response = requests.get(url, headers={'X-Api-Key': API_KEY})
-        response_data = response.json()
-        response4 = response_data
-        return render_template('/breeds/p2.html', response3=response3, response4=response4)
-
-@app.route('/all_p3', methods=["GET"])
-def all_dogs_p3():
-    """Display all dogs who bark at level 3."""        
-    url = f'{API_BASE_URL}barking=3;offset=0'
-    response = requests.get(url, headers={'X-Api-Key': API_KEY})
-    response_data = response.json()
-    response5 = response_data
-            
-    if len(response5) == 20:
-        url = f'{API_BASE_URL}barking=3;offset=20'
-        response = requests.get(url, headers={'X-Api-Key': API_KEY})
-        response_data = response.json()
-        response6 = response_data
-
-        if len(response6) == 20:
-            url = f'{API_BASE_URL}barking=3;offset=40'
-            response = requests.get(url, headers={'X-Api-Key': API_KEY})
-            response_data = response.json()
-            response7 = response_data
-
-            if len(response5) == 20:
-                url = f'{API_BASE_URL}barking=3;offset=60'
-                response = requests.get(url, headers={'X-Api-Key': API_KEY})
-                response_data = response.json()
-                response8 = response_data
-
-                if len(response5) == 20:
-                    url = f'{API_BASE_URL}barking=3;offset=80'
-                    response = requests.get(url, headers={'X-Api-Key': API_KEY})
-                    response_data = response.json()
-                    response9 = response_data
-
-                    if len(response5) == 20:
-                        url = f'{API_BASE_URL}barking=3;offset=100'
-                        response = requests.get(url, headers={'X-Api-Key': API_KEY})
-                        response_data = response.json()
-                        response10 = response_data
-
-                        if len(response5) == 20:
-                            url = f'{API_BASE_URL}barking=3;offset=120'
-                            response = requests.get(url, headers={'X-Api-Key': API_KEY})
-                            response_data = response.json()
-                            response11 = response_data
-
-                            if len(response5) == 20:
-                                url = f'{API_BASE_URL}barking=3;offset=140'
-                                response = requests.get(url, headers={'X-Api-Key': API_KEY})
-                                response_data = response.json()
-                                response12 = response_data
-                                return render_template('/breeds/p3.html', response5=response5, response6=response6, response7=response7,
-                                       response8=response8, response9=response9, response10=response10, response11=response11, 
-                                       response12=response12)
-
-@app.route('/all_p4', methods=["GET"])
-def all_dogs_p4():
-    """Display all dogs that bark at level 4."""             
-    url = f'{API_BASE_URL}barking=4;offset=0'
-    response = requests.get(url, headers={'X-Api-Key': API_KEY})
-    response_data = response.json()
-    response13 = response_data
-
-    if len(response13) == 20:
-        url = f'{API_BASE_URL}barking=4;offset=20'
-        response = requests.get(url, headers={'X-Api-Key': API_KEY})
-        response_data = response.json()
-        response14= response_data
-
-        if len(response14) == 20:
-            url = f'{API_BASE_URL}barking=4;offset=40'
-            response = requests.get(url, headers={'X-Api-Key': API_KEY})
-            response_data = response.json()
-            response15 = response_data
-            return render_template('/breeds/p4.html', response13=response13, response14=response14, response15=response15)
-
-@app.route('/all_p5', methods=["GET"])
-def all_dogs_p5():
-    """Display all dogs that bark at level 5."""
-    url = f'{API_BASE_URL}barking=5;offset=0'
-    response = requests.get(url, headers={'X-Api-Key': API_KEY})
-    response_data = response.json()
-    response16 = response_data        
-
-    if len(response16) == 20:
-        url = f'{API_BASE_URL}barking=5;offset=20'
-        response = requests.get(url, headers={'X-Api-Key': API_KEY})
-        response_data = response.json()
-        response17= response_data
-        return render_template('/breeds/p5.html', response16=response16, response17=response17)
+@app.route('/search_results', methods=["GET"])
+def show_breed_search_results():
+    """Display breed info retrieved from breed search and add to breed_picker database."""
+    # Issues:
+    # - How do I query my database so that I can render the template with the data from 
+    # from my database instead of the data returned from the dogs API?
+    
+    data = search_breeds()
+    add_breed_to_db()
+    
+    return render_template('/breeds/search_results.html', data=data)
 
 
 ###################################################################################
 # FAVORITE ROUTES
 ###################################################################################
 
-# @app.route('/user/favorites', methods=["POST"])
-# def favorite_breed(breed_id):
-#     """Adds/removes likes from breeds."""
+@app.route('/breeds/<int:breed_id>/favorite', methods=["GET", "POST"])
+def favorite_a_breed(breed_id):
+    """Adds/removes breeds from favorites list."""
 
-#     if not g.user:
-#         flash('Please login to favorite a breed.', 'danger')
-#         return redirect('/')
+    # Issues:
+    # - How do i get the breed_id from the search results?
 
-#     # query the breed to see if it is in the 'favorites' table (meaning it has been favorited)
-#     favorited_breed = Breed.query.get_or_404(breed_id)
-#     # get the user's favorites
-#     user_favorites = g.user.favorites
-
-#     if favorited_breed in user_favorites:
-#         g.user.favorites = [favorite for favorite in user_favorites if favorite != favorited_breed]
-#     else: 
-#         g.user.favorites.append(favorited_breed)
+    if not g.user:
+        flash('Please login to favorite a breed.', 'danger')
+        return redirect('/')
     
-#     db.session.commit()
+    # breed_id = Breed.query.get()
+   
+    favorited_breed = Favorite.query.get(breed_id)    # query the breed to see if it is in the 'favorites' table (meaning it has been favorited)
 
-#     return redirect('/user')
+    user_favorites = g.user.favorites    # store user's previous favorites
 
+   
+    if favorited_breed in user_favorites:      #if user unfavorites the breed, remove from g.user.favorites
+        flash("This breed was removed from favorites.", "danger")
+        g.user.favorites = [favorite for favorite in user_favorites if favorite != favorited_breed]
+    else:      # else append favorited_breed to g.user.favorites 
+        flash("This breed was added to your favorites.", "info" )
+        g.user.favorites.append(favorited_breed)
+       
+    db.session.commit()
+
+    return render_template('/user/user_profile')
 
 ###################################################################################
 # BREED REVIEW ROUTES
 ###################################################################################
 
-@app.route('/reviews_list', methods=["GET"])
+@app.route('/reviews/list_reviews', methods=["GET"])
 def show_all_reviews():
     """Shows all breed reviews."""
+
+    reviews = Review.query.all()
+    
+    return render_template('reviews/list_reviews.html', reviews=reviews)
+
+
+@app.route('/user/my_reviews', methods=["GET"])
+def show_user_reviews():
+    """Show user's breed reviews."""
+
+    user = g.user
 
     if not g.user:
         flash("Please login or sign up for an account.", "danger")
         return redirect('/')
-
-    user = g.user
-    reviews = Review.query.all()
-
-    return render_template('reviews/list_reviews.html', user=user, reviews=reviews)
+    
+    return render_template('user/my_reviews.html', user=user,)  
 
 
 @app.route('/reviews/add_review', methods=["GET", "POST"])
-def add_breed_review():
+def add_breed_review(query):
     """ Add breed review to database.  Redirect to user page.
         If the form is not valid, flash message and re-present form.
     """
+
+    # Issues:
+    # - How do I get breed_id from search results 
 
     if not g.user:
         flash("Access unauthorized.  Please log in or sign up for an account.", "danger")
         return redirect('/login')
 
     form = Breed_review_form()
+    query = request.args.get('breed_search')
+    name = query
+    breed = db.session.query(Breed.name).filter_by(name=name).first()
 
     if  form.validate_on_submit():
-        breed_name = form.breed_name.data
-        maintenance_rating = form.maintenance_rating.data
-        behavior_rating = form.behavior_rating.data
-        trainability_rating = form.trainability_rating.data
-        comments = form.comments.data
 
-        review = Review(breed_name=breed_name, maintenance_rating=maintenance_rating, 
-                 behavior_rating=behavior_rating, trainability_rating=trainability_rating, comments=comments)     
-
-        db.session.add(review)
-        db.session.commit()
-        return redirect(f"/reviews")   
-    
+       review = Review(
+            breed_name = breed['name'],
+            maintenance_rating = form.maintenance_rating.data,
+            behavior_rating = form.behavior_rating.data,
+            trainability_rating = form.trainability_rating.data,
+            comments = form.comments.data
+        )
     else:
-        return render_template("/reviews/add_review.html", form=form)
+        return render_template("/reviews/add_review.html", form=form, breed=breed)
+
+    db.session.add(review)
+    db.session.commit()
+    
+    return redirect(f"/user/my_reviews")   
     
 
-@app.route('/review/edit_review', methods=["GET", "POST"])
+@app.route('/reviews/edit_review', methods=["GET", "POST"])
 def edit_breed_review():
-    """Update breed reveiw and add to database.  Redirect to user page.
-       If the form is not valid flash message and re-present form.
-    """
+    """Update breed reveiw and add to database."""
+
+    review = g.user.review
+    form = Edit_profile_form(obj=review)
+
+    return render_template('edit_review.html', review=review, form=form)
 
 
-
-@app.route('/review/delete', methods=["POST"])
+@app.route('/reviews/delete', methods=["POST"])
 def delete_breed_review():
     """Delete breed review from database."""
 
@@ -446,13 +331,11 @@ def delete_breed_review():
         flash("Access unauthorized.  Please log in or create an account.", "danger")
         return redirect("/login")
     
-    logout_user()
-
     db.session.delete()
     db.session.commit()
 
-    flash("User profile has been deleted.", "info")
-    return redirect('/signup')
+    flash("User's review has been deleted.", "info")
+    return redirect('/reviews/list_reviews')
 
 
 ###################################################################################
