@@ -3,53 +3,100 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
-
-
-
-<div>
-    {% for i in data %} 
-    <h3>{{ i['name'] }}</h3>
+<!-- <h4>Search Results:</h4>
+<br><br>
+<div class="container">    
+    {% for breed in breeds %}
+    <h2>{{ breed['name'] }}</h2>
     <br>
-    <a href="/reviews/add_review"><button class="btn btn-secondary" type="submit">Review the {{ i['name'] }} breed</button></a> 
-    <form action="/breeds/{{ i['id'] }}/favorites" method="POST">
-        <a href="/user"><button class="btn btn-secondary" type="submit">Add to favorites</button></a>  
-        <!-- <i class="fa-regular fa-heart fa-2x"></i> -->
+    <form >
+        <button formmethod="POST" formaction="/breeds/{{ breed['id'] }}/favorites" class="btn btn-secondary" type="submit">Add to Favorites</button> 
+        <button formmethod="POST" formaction="/reviews/add_review" class="btn btn-secondary"  type="submit">Review the {{ breed['name'] }} breed</button>
     </form>
     <br><br>
-    <img src="{{ i['image_link'] }}">
+    <img src="{{ breed.image_link }}">
+    <br><br>
+    <div class="key">
+        <h5><b>Key:</b>  0 = Never/Least - 3 = Sometimes/Some - 5 = Always/Most</h5>
+    </div>
+    <b>Good with children:</b> {{ breed['good_with_children'] }}
+    <br>
+    <b>Good with other dogs:</b> {{ breed['good_with_other_dogs'] }}
+    <br>
+    <b>Barking:</b> {{ breed['barking'] }}
+    <br>
+    <b>Shedding:</b> {{ breed['shedding'] }}
+    <br>
+    <b>Coat Length:</b> {{ breed['coat_length'] }}
+    <br>
+    <b>Grooming:</b> {{ breed['grooming'] }}
+    <br>
+    <b>Drooling:</b> {{ breed['drooling'] }}
+    <br>
+    <b>Energy:</b> {{ breed['energy'] }}
+    <br>
+    <b>Trainability:</b> {{ breed['trainability'] }}
+    <br>
+    <b>Protectiveness:</b> {{ breed['protectiveness'] }}
+    <br>
+    <b>Maximum life expectancy:</b> {{ breed['max_life_expectancy'] }} years
+    <br>
+    <b>Maximum height (male):</b> {{ breed['max_height_male'] }} inches
+    <br>
+    <b>Maximum height (female):</b> {{ breed['max_height_female'] }} inches
+    <br>
+    <b>Maximum weight (male):</b> {{ breed['max_weight_male'] }} lbs
+    <br>
+    <b>Maximum weight (female):</b> {{ breed['max_weight_female'] }} lbs
+    <br><br>
+    <hr>
+    <br><br>
+    {% endfor %} 
+ -->
+
+<div>
+    {% for breed in data %} 
+    <h3>{{ breed['name'] }}</h3>
+    <br>
+    <form >
+        <button formmethod="POST" formaction="/breeds/{{ breed['id'] }}/favorites" class="btn btn-secondary" type="submit">Add to Favorites</button> 
+        <button formmethod="POST" formaction="/reviews/add_review" class="btn btn-secondary"  type="submit">Review the {{ breed['name'] }} breed</button>
+    </form>
+    <br><br>
+    <img src="{{ breed['image_link'] }}">
     <br><br><br>
     <div class="key">
         <h5><b>Key:</b>  0 = Never/Least - 3 = Sometimes/Some - 5 = Always/Most</h5>
     </div>
-    <b>Good with children:</b> {{ i['good_with_children'] }}
+    <b>Good with children:</b> {{ breed['good_with_children'] }}
     <br>
-    <b>Good with other dogs:</b> {{ i['good_with_other_dogs'] }}
+    <b>Good with other dogs:</b> {{ breed['good_with_other_dogs'] }}
     <br>
-    <b>Barking:</b> {{ i['barking'] }}
+    <b>Barking:</b> {{ breed['barking'] }}
     <br>
-    <b>Shedding:</b> {{ i['shedding'] }}
+    <b>Shedding:</b> {{ breed['shedding'] }}
     <br>
-    <b>Coat Length:</b> {{ i['coat_length']}}
+    <b>Coat Length:</b> {{ breed['coat_length']}}
     <br>
-    <b>Grooming:</b> {{ i['grooming'] }}
+    <b>Grooming:</b> {{ breed['grooming'] }}
     <br>
-    <b>Drooling:</b> {{ i['drooling'] }}
+    <b>Drooling:</b> {{ breed['drooling'] }}
     <br>
-    <b>Energy:</b> {{ i['energy'] }}
+    <b>Energy:</b> {{ breed['energy'] }}
     <br>
-    <b>Trainability:</b> {{ i['trainability'] }}
+    <b>Trainability:</b> {{ breed['trainability'] }}
     <br>
-    <b>Protectiveness:</b> {{ i['protectiveness'] }}
+    <b>Protectiveness:</b> {{ breed['protectiveness'] }}
     <br>
-    <b>Maximum life expectancy:</b> {{ i['max_life_expectancy'] }} years
+    <b>Maximum life expectancy:</b> {{ breed['max_life_expectancy'] }} years
     <br>
-    <b>Maximum height (male):</b> {{ i['max_height_male'] }} inches
+    <b>Maximum height (male):</b> {{ breed['max_height_male'] }} inches
     <br>
-    <b>Maximum height (female):</b> {{ i['max_height_female'] }} inches
+    <b>Maximum height (female):</b> {{ breed['max_height_female'] }} inches
     <br>
-    <b>Maximum weight (male):</b> {{ i['max_weight_male'] }} lbs
+    <b>Maximum weight (male):</b> {{ breed['max_weight_male'] }} lbs
     <br>
-    <b>Maximum weight (female):</b> {{ i['max_weight_female'] }} lbs
+    <b>Maximum weight (female):</b> {{ breed['max_weight_female'] }} lbs
     <br><br>
     
     {% endfor %} 

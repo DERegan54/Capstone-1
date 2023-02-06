@@ -1,18 +1,56 @@
-{% extends 'user/user_profile.html' %}
+{% extends 'base.html' %}
 
 {% block content %} 
-
+<h3>{{user.username}}'s Favorite Breeds:</h3>
 <div class = container>
-    {% for i in user_favorites %} 
-    <h3>{{ i['name'] }}</h3>
+    {% for favorite in user.favorites %} 
+    <h3>{{ favorite['name'] }}</h3>
     <br><br>
-    <img src="{{ i['image_link'] }}">
+    <img src="{{ favorite['image_link'] }}">
     <br><br>
-    <a href="/reviews/add_review"><button class="btn btn-secondary" type="submit">Review the {{ i['name'] }} breed</button></a> 
+    <div class="key">
+        <h5><b>Key:</b>  0 = Never/Least - 3 = Sometimes/Some - 5 = Always/Most</h5>
+    </div>
+    <b>Good with children:</b> {{ favorite['good_with_children'] }}
+    <br>
+    <b>Good with other dogs:</b> {{ favorite['good_with_other_dogs'] }}
+    <br>
+    <b>Barking:</b> {{ favorite['barking'] }}
+    <br>
+    <b>Shedding:</b> {{ favorite['shedding'] }}
+    <br>
+    <b>Coat Length:</b> {{ favorite['coat_length'] }}
+    <br>
+    <b>Grooming:</b> {{ favorite['grooming'] }}
+    <br>
+    <b>Drooling:</b> {{ favorite['drooling'] }}
+    <br>
+    <b>Energy:</b> {{ favorite['energy'] }}
+    <br>
+    <b>Trainability:</b> {{ favorite['trainability'] }}
+    <br>
+    <b>Protectiveness:</b> {{ favorite['protectiveness'] }}
+    <br>
+    <b>Maximum life expectancy:</b> {{ favorite['max_life_expectancy'] }} years
+    <br>
+    <b>Maximum height (male):</b> {{ favorite['max_height_male'] }} inches
+    <br>
+    <b>Maximum height (female):</b> {{ favorite['max_height_female'] }} inches
+    <br>
+    <b>Maximum weight (male):</b> {{ favorite['max_weight_male'] }} lbs
+    <br>
+    <b>Maximum weight (female):</b> {{ favorite['max_weight_female'] }} lbs
     <br><br>
+    <hr>
+    <br><br>
+    {% endfor %} 
 
+    <br><br>
+    <a href="/reviews/add_review"><button class="btn btn-secondary" type="submit">Review the {{ favorite['name'] }} breed</button></a> 
+    <br><br>
     
 </div>
+<br><br>
 
 
 {% endblock %} 

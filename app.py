@@ -2,12 +2,12 @@ from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from secrets import API_KEY
 from sqlalchemy.exc import IntegrityError
-from forms import Add_user_form, Login_Form, Edit_profile_form, Breed_review_form
+from forms import Add_user_form, Login_Form, Edit_profile_form, Breed_review_form, Delete_form
 from models import db, connect_db, User, Breed, Review, Favorite 
 from user import login_user, logout_user
 from api_requests import add_breed_to_db, search_breeds
 import requests
-import json
+
 
 
 app = Flask(__name__)
@@ -133,22 +133,28 @@ def logout():
 def show_user_profile():
     """Show user profile page."""
 
-    # Issues:
-    # How do I display the list of the user's favorite breeds? 
-
     if not g.user:
         flash("Please login or sign up for an account.", "danger")
         return redirect('/')
 
     user = g.user
     
-    # favorites = g.user.favorites     
+    favorites = Favorite.query.all()   
 
-    return render_template('user/my_profile.html', user=user)
+    return render_template('user/my_profile.html', user=user, favorites=favorites)
    
 
+@app.route('/user/edit_form', methods=["GET"])
+def show_edit_profile_form():
+    """Show edit profile form."""
+    
+    user = g.user
+    form = Edit_profile_form(obj=user)
+    
+    return render_template('/user/edit_profile.html', user=user, form=form)
 
-@app.route('/user/edit', methods=["GET", "POST"])
+
+@app.route('/user/edit', methods=["POST"])
 def edit_profile():
     """Update profile details for current user."""
 
@@ -159,9 +165,10 @@ def edit_profile():
     user = g.user
     form = Edit_profile_form(obj=user)
 
+    
+    user = User.authenticate(user.username, form.password.data)
+    
     if form.validate_on_submit():
-        user = User.authenticate(user.username, form.password.data)
-
         user.username = form.username.data
         user.email = form.email.data
         user.profile_photo = form.profile_photo.data
@@ -174,7 +181,8 @@ def edit_profile():
         db.session.commit()
         flash("Profile successfully updated.", "info")
         return redirect('/user')
-    return render_template('user/edit_profile.html', form=form)   
+    
+    return render_template('user/edit_profile.html', form=form, user=user)   
      
 
 @app.route('/user/delete', methods=["POST"])
@@ -212,44 +220,84 @@ def show_breed_search_results():
     # - How do I query my database so that I can render the template with the data from 
     # from my database instead of the data returned from the dogs API?
     
-    data = search_breeds()
-    add_breed_to_db()
+
+    query = request.args.get('breed_search')  # Grabs input from search form
+
+    data = search_breeds(query) # Queries dogs API
     
-    return render_template('/breeds/search_results.html', data=data)
+    add_breed_to_db(query) # Adds response data from dogs API to database 
+    
+    breeds = Breed.query.all()
+    
+    return render_template('/breeds/search_results.html', query=query, data=data, breeds=breeds)  # Shows search results on search_results page
+    
+
+    # Can I somehow retrieve the item from breeds that matches the query and then access the breed_id from there?
+    # breeds = Breed.query.all()
+    # for breed in breeds:
+    #     ids = []
+    #     id = breed.id
+    #     ids.append(id)
+    # print('#################', ids)
+    # for breed in breeds:
+    #     names = []
+    #     name = breed.name
+    #     names.append(name)
+    #     return names
+    # print('########################', names)
+    # breeds_data = dict(zip(ids, names))
+
+
+    # for breed in breeds:
+    #     ids = []
+    #     ids.append(breed[0])
+    #     names = []
+    #     names.append(breed[1])
+    # print('$$$$$$$$$$$$$$$$$$$$$', breeds_data)    
+   
+    
 
 
 ###################################################################################
 # FAVORITE ROUTES
 ###################################################################################
 
-@app.route('/breeds/<int:breed_id>/favorite', methods=["GET", "POST"])
-def favorite_a_breed(breed_id):
-    """Adds/removes breeds from favorites list."""
+@app.route('/user/my_favorites', methods=["GET"])
+def show_user_favorites():
+    """Displays users list of favorite breeds."""
 
-    # Issues:
-    # - How do i get the breed_id from the search results?
+    if not g.user:
+        flash("Please login or sign up for an account.", "danger")
+        return redirect('/')
+
+    user = g.user
+    favorites = Favorite.query.all()
+    user_favorites = user.favorites
+    
+    return render_template('/user/my_favorites.html', user=user, user_favorites=user_favorites)
+
+
+@app.route('/user/<name>/favorite', methods=["GET", "POST"])
+def favorite_a_breed(name):
+    """Adds/removes breeds from favorites list."""
 
     if not g.user:
         flash('Please login to favorite a breed.', 'danger')
         return redirect('/')
     
-    # breed_id = Breed.query.get()
-   
-    favorited_breed = Favorite.query.get(breed_id)    # query the breed to see if it is in the 'favorites' table (meaning it has been favorited)
+    favorited_breed = db.session.query(Breed).filter_by(name=name).first()
+    
+    # query the breed to see if it is in the 'favorites' table (meaning it has been favorited)
+    user_favorites = g.user.favorites #get the user's favorites
 
-    user_favorites = g.user.favorites    # store user's previous favorites
-
-   
-    if favorited_breed in user_favorites:      #if user unfavorites the breed, remove from g.user.favorites
-        flash("This breed was removed from favorites.", "danger")
-        g.user.favorites = [favorite for favorite in user_favorites if favorite != favorited_breed]
+    if favorited_breed in user_favorites:  # if the breed is in the user_favorites list
+        g.user.favorites = [favorite for favorite in user_favorites if favorited_breed != user_favorites]  #if the breed is user_favorites, unfavorite it
     else:      # else append favorited_breed to g.user.favorites 
-        flash("This breed was added to your favorites.", "info" )
         g.user.favorites.append(favorited_breed)
        
     db.session.commit()
 
-    return render_template('/user/user_profile')
+    return redirect('/user/my_favorites')
 
 ###################################################################################
 # BREED REVIEW ROUTES
@@ -260,8 +308,9 @@ def show_all_reviews():
     """Shows all breed reviews."""
 
     reviews = Review.query.all()
-    
-    return render_template('reviews/list_reviews.html', reviews=reviews)
+    user = g.user
+
+    return render_template('/reviews/list_reviews.html', user=user, reviews=reviews)
 
 
 @app.route('/user/my_reviews', methods=["GET"])
@@ -277,65 +326,90 @@ def show_user_reviews():
     return render_template('user/my_reviews.html', user=user,)  
 
 
-@app.route('/reviews/add_review', methods=["GET", "POST"])
-def add_breed_review(query):
-    """ Add breed review to database.  Redirect to user page.
-        If the form is not valid, flash message and re-present form.
-    """
+@app.route('/reviews/review_form', methods=["GET"])
+def show_review_form():
+    """Display review form."""
 
-    # Issues:
-    # - How do I get breed_id from search results 
+    breed = request.args.get('breed_search')
+  
+    user = g.user
+    form = Breed_review_form()
+   
+    return render_template('/reviews/add_review.html', user=user, form=form, breed=breed)
 
-    if not g.user:
-        flash("Access unauthorized.  Please log in or sign up for an account.", "danger")
-        return redirect('/login')
+@app.route('/reviews/add_review', methods=["POST"])
+def add_breed_review():
+    """ Add breed review to database.  Redirect to user page. """
 
     form = Breed_review_form()
-    query = request.args.get('breed_search')
-    name = query
-    breed = db.session.query(Breed.name).filter_by(name=name).first()
 
-    if  form.validate_on_submit():
-
-       review = Review(
-            breed_name = breed['name'],
+    if form.validate_on_submit():
+        review = Review(
+            breed_name = form.breed_name.data,
             maintenance_rating = form.maintenance_rating.data,
             behavior_rating = form.behavior_rating.data,
             trainability_rating = form.trainability_rating.data,
-            comments = form.comments.data
+            comments = form.comments.data,
+            user_id = g.user.id
         )
+        db.session.add(review)
+        db.session.commit()
+        return redirect("/user/my_reviews") 
     else:
-        return render_template("/reviews/add_review.html", form=form, breed=breed)
-
-    db.session.add(review)
-    db.session.commit()
-    
-    return redirect(f"/user/my_reviews")   
+        return render_template('/reviews/add_review.html', form=form)
     
 
-@app.route('/reviews/edit_review', methods=["GET", "POST"])
-def edit_breed_review():
+@app.route('/reviews/<int:review_id>/edit_review_form', methods={"GET"})
+def show_edit_review_form(review_id):
+    """Show edit breed review form."""
+
+    user = g.user
+    review = Review.query.get(review_id)
+    form = Breed_review_form(obj=review)
+    
+    return render_template('/reviews/edit_review.html', user=user, form=form, review=review)
+
+
+@app.route('/reviews/<int:review_id>/edit_review', methods=["POST"])
+def edit_breed_review(review_id):
     """Update breed reveiw and add to database."""
-
-    review = g.user.review
-    form = Edit_profile_form(obj=review)
-
-    return render_template('edit_review.html', review=review, form=form)
-
-
-@app.route('/reviews/delete', methods=["POST"])
-def delete_breed_review():
-    """Delete breed review from database."""
-
-    if not g.user:
-        flash("Access unauthorized.  Please log in or create an account.", "danger")
-        return redirect("/login")
     
-    db.session.delete()
-    db.session.commit()
+    user = g.user
+    form = Breed_review_form()
+    review = Review.query.get(review_id)
+    if form.validate_on_submit():
+        review.breed = form.breed_name.data
+        review.maintenance_rating = form.maintenance_rating.data
+        review.behavior_rating = form.behavior_rating.data
+        review.trainability_rating = form.trainability_rating.data
+        review.comments = form.comments.data
+        
+        db.session.commit()
+        flash("Review successfully updated.", "info")
+        return redirect(f'/reviews/list_reviews')
+
+    return render_template('/reviews/edit_review.html', user=user, form=form, review=review)
+
+
+@app.route('/reviews/<int:review_id>/delete', methods=["POST"])
+def delete_breed_review(review_id):
+    """Delete breed review from database."""
+    
+    review = Review.query.get(review_id)
+
+    form = Delete_form(obj=review)
+    
+    if not g.user:
+        flash("Please login or sign up for an account.", "danger")
+        return redirect('/')
+
+    if form.validate_on_submit:
+        db.session.delete(review)
+        db.session.commit()
 
     flash("User's review has been deleted.", "info")
-    return redirect('/reviews/list_reviews')
+    return redirect(f'/reviews/list_reviews')
+   
 
 
 ###################################################################################
@@ -347,4 +421,6 @@ def show_adopt_page():
     """Shows Adopt Page."""
 
     return render_template('adopt.html')    
+
+
 

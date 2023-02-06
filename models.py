@@ -32,6 +32,10 @@ class User (db.Model):
     other_pets = db.Column(db.String)
     environment = db.Column(db.String)
     experience_level = db.Column(db.String)
+    # review_id = db.Column(db.Integer, db.ForeignKey('reviews.id', ondelete='cascade'))
+
+    reviews = db.relationship('Review', single_parent=True, backref='users', cascade='all, delete-orphan')
+    favorites = db.relationship('Favorite', single_parent=True, backref='users', cascade='all, delete-orphan')
 
     def __repr__(self):
         return f"<User {self.id}: {self.username}, {self.password}"
@@ -99,7 +103,7 @@ class Breed (db.Model):
     image_link = db.Column(db.String)
     good_with_children = db.Column(db.Integer)
     good_with_other_dogs = db.Column(db.Integer)
-    shedding = db.column(db.Integer)
+    shedding = db.Column(db.Integer)
     coat_length = db.Column(db.Integer)
     trainability = db.Column(db.Integer)
     barking = db.Column(db.Integer)
@@ -118,11 +122,15 @@ class Breed (db.Model):
     good_with_strangers = db.Column(db.Integer)
     playfulness = db.Column(db.Integer)
     protectiveness = db.Column(db.Integer)
-    energy = db.column(db.Integer)
+    energy = db.Column(db.Integer)
     name = db.Column(db.String, unique=True, nullable=False)    
 
+    reviews = db.relationship('Review', single_parent=True, backref='breeds', cascade='all, delete-orphan')
+    favorites = db.relationship('Favorite', single_parent=True, backref='breeds', cascade='all, delete-orphan')
+    
+    def __repr__(self):
+        return f"<Breed {self.id}: {self.name}"
 
-   
 
 class Review (db.Model):
     """Model that creates instances of dog breed reviews."""
@@ -130,7 +138,7 @@ class Review (db.Model):
     __tablename__ = 'reviews'
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True, nullable=False)
-    breed_name = db.column(db.String)
+    breed_name = db.Column(db.String)
     maintenance_rating = db.Column(db.Integer, nullable=False)
     behavior_rating = db.Column(db.Integer, nullable=False)
     trainability_rating = db.Column(db.Integer, nullable=False)
@@ -138,24 +146,6 @@ class Review (db.Model):
     breed_id = db.Column(db.Integer, db.ForeignKey('breeds.id', ondelete='cascade'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'))
 
-    users = db.relationship('User', single_parent=True, backref='reviews', cascade='all, delete-orphan')
-    breeds = db.relationship('Breed', single_parent=True, backref='reviews', cascade='all, delete-orphan')
-
-    @classmethod
-    def add_review(cls, breed_name, maintenance_rating, behavior_rating, trainability_rating, comments):
-        """ Adds breed review to database."""
-
-        review = Review(
-            breed_name=breed_name,
-            maintenance_rating=maintenance_rating,
-            behavior_rating = behavior_rating,
-            trainability_rating = trainability_rating,
-            comments=comments
-        )
-        db.session.add(review)
-        db.session.commit()
-        return review
-    
 
 class Favorite (db.Model):
     """Model that creates instances of breeds that the user is considering."""
@@ -163,12 +153,11 @@ class Favorite (db.Model):
     __tablename__ = 'favorites'
 
     
-    breed_id = db.Column(db.Integer, db.ForeignKey('breeds.id', ondelete='cascade'), primary_key=True)
+    breeds_name = db.Column(db.Text, db.ForeignKey('breeds.name', ondelete='cascade'), primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'), primary_key=True)
 
-    breeds = db.relationship('Breed', single_parent=True, backref='favorites', cascade='all, delete-orphan')
-    users = db.relationship('User', single_parent=True, backref='favorites', cascade='all, delete-orphan')
-
+    
+    
     def __repr__(self):
         return f'<Favorites | User {self.user_id} | Breed {self.breed_id}>'
 

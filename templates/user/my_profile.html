@@ -7,7 +7,7 @@
 <h1><b>{{ user.username }}</b></h1>
 <br><br>
 <p> 
-    <img src='{{ user.profile_photo }}'>
+    <img src='{{ user.profile_photo }}' alt="Update Profile to add a photo">
     <br><br>
     <b>Email:</b>{{ user.email }}
     <br>
@@ -21,10 +21,11 @@
     <br>
     <b>Experience with dogs:</b>{{ user.experience_level }}
     <br>
-</p>    
-<a href="/user/edit"><button class="btn btn-secondary" type="submit">Edit Profile</button></a> 
-<form action="/user/delete" method="POST">
-    <a href="/user/delete"><button class="btn btn-secondary" type="submit">Delete User</button></a> 
+</p>
+
+<form >
+    <button formmethod="GET" formaction="/user/edit_form" class="btn btn-secondary" type="submit">Update Profile</button> 
+    <button formmethod="POST" formaction="/user/delete" class="btn btn-secondary" type="submit">Delete User</button> 
 </form>
 <br><br>
 {% endblock %}

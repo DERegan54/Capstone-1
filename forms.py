@@ -37,14 +37,12 @@ class Edit_profile_form(FlaskForm):
 
 class Breed_review_form(FlaskForm):
     """Form for submitting a breed review."""
-
-    maintenance_rating = SelectField('Maintenance Required:', choices=[(1), (2),(3), (4), (5)], validators=[InputRequired()])
-    behavior_rating = SelectField('Obedience:', choices=[(1), (2), (3), (4), (5)], validators=[InputRequired()])
-    trainability_rating = SelectField('Trainability:', choices=[(1), (2), (3), (4), (5)], validators=[InputRequired()])
-    comments = StringField('Comments:', validators=[Optional()])
-
-
+    breed_name = StringField('Breed name:', validators=[InputRequired()])
+    maintenance_rating = SelectField('Maintenance Rating:', choices=[(1), (2),(3), (4), (5)], validators=[InputRequired()])
+    behavior_rating = SelectField('Obedience Rating:', choices=[(1), (2), (3), (4), (5)], validators=[InputRequired()])
+    trainability_rating = SelectField('Trainability Rating:', choices=[(1), (2), (3), (4), (5)], validators=[InputRequired()])
+    comments = StringField('Comments:', validators=[Optional()], render_kw={"placeholder": "Please enter your comments here"})
 
 
-
-
+class Delete_form(FlaskForm):
+    """Delete form -- this form is intentionally blank."""

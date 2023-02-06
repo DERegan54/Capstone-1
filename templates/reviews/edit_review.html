@@ -11,15 +11,13 @@
     </div>
 
     <div class="mb-3">
-        <form action="/breed_review" method="POST">
+        <form action="/reviews/{{ review.id }}/edit_review" method="POST">
             {% include 'form.html' %} 
             <button class="btn btn-secondary" type="submit">Save Changes</button>
         </form>
-        <form action="/breed_review/delete" method="POST">
-            <a href="/breed_review/delete"><button class="btn btn-secondary" type="submit">Delete Breed Review</button></a> 
-        </form>
     </div>
 </div>
+<br><br>
 
 
 

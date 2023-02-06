@@ -15,12 +15,14 @@ LOCAL_BASE_URL = 'http://127.0.0.1:5000/'
 # FUNCTIONS FOR MAKING REQUESTS TO DOGS API
 ############################################################################
 
-def add_breed_to_db():
+def add_breed_to_db(query):
     """Adds model instance of breed to database."""
     # Issues: 
     # - If there is more than one record returned from the search, how to save all records to the database  
    
-    data = search_breeds()  # Query dogs API with search input and save response to 'data' variable
+    data = search_breeds(query)  # Query dogs API with search input and save response to 'data' variable
+    
+    
     name = data[0]['name']  # Get the 'name' (breed name) attribute from the first record in data and save to 'name' variable to access that record
     exists = db.session.query(Breed.name).filter_by(name=name).first() is not None  # Check if name exists in breed_picker database
     for i in data:     # For each record i in data...
@@ -57,29 +59,15 @@ def add_breed_to_db():
             return breed  #return newly created breed record 
     
 
-def search_breeds():
+def search_breeds(query):
     """Querys dogs API to get dog breed info."""
 
     query = request.args.get('breed_search')  # Grab input from 'breed_search' and save to 'query' variable 
    
-    try:
-        url = f'{API_BASE_URL}name={query}'   # Add query to endpoint
-        response = requests.get(url, headers={'X-Api-Key': API_KEY})  # Get query from dogs API
-        data = response.json()  # Save response data to 'data' variable
+    url = f'{API_BASE_URL}name={query}'   # Add query to endpoint
+    response = requests.get(url, headers={'X-Api-Key': API_KEY})  # Get query from dogs API
+    data = response.json()  # Save response data to 'data' variable
         
-        return data   #return data
+    return data   
         
-    except:
-        flash("Invalid search. Please enter a breed.", "danger")  # If search is invalid, flash message and redirect to search page
-        return redirect("/search")
-
-   
-
-def request_individual_breed(query):
-    """Return individual breed's data."""
     
-    query = request.args.get('breed_search')  # Grab input from 'breed_search' and save to 'query' variable 
-   
-    url= f'{API_BASE_URL}/name={name}'
-    response = requests.get(url)
-    data = response.json()
