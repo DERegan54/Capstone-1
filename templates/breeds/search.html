@@ -5,18 +5,38 @@
 {% block content %}
 
 
-<!-- Search Form -->
+<!-- Search by breed Form -->
 <div class="container">
     <h1>Search By Breed Name:</h1>
-    
     <div class="input-group mt-4">
-        <form action="/search_results">
+        <form action="/breed_search_results" id="search_breeds">
             <input type="text" placeholder="Enter a dog breed" name="breed_search"> 
             <button type="submit">Go!</button>
         </form>
-       
-    </div>
-    
+    </div> 
+</div>
+
+<br><br><br>
+<div class="container">
+    <h1>OR</h1>
+</div>
+<br><br>
+<!-- Search by characteristic Form -->
+<div class="container">
+    <h1>Search By Breed Characteristic:</h1>
+    <div class="input-group mt-4">
+        <form action="/characteristic_search_results" id="search_characteristics">
+            <select name="breed_characteristic", id="breed_characteristic"> 
+                <option value="" disabled selected hidden>Select a breed characteristic</option>
+                <option value="barking">Minimal Barking</option>
+                <option value="shedding">Minimal Shedding</option>
+                <option value="energy">Minimal Energy</option>
+                <option value="protectiveness">Maximum Protectiveness</option>
+                <option value="trainability">Maximum Trainability</option>
+            </select>  
+            <button type="submit">Go!</button>
+        </form>
+    </div> 
 </div>
 <br><br>
 {% endblock %} 

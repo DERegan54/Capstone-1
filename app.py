@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from forms import Add_user_form, Login_Form, Edit_profile_form, Breed_review_form, Delete_form
 from models import db, connect_db, User, Breed, Review, Favorite 
 from user import login_user, logout_user
-from api_requests import add_breed_to_db, search_breeds
+from api_requests import add_breed_search_to_db, add_characteristic_search_to_db, search_breeds, search_characteristic
 import requests
 
 
@@ -57,11 +57,7 @@ def add_user_to_g():
 
 @app.route('/signup', methods=["GET", "POST"])
 def signup():
-    """Handle user signup.
-        Create new user and add to database.  Redirect to homepage.
-        If the form is not valid, re-present form.
-        If the username is already taken, flash message and re-present form.
-    """
+    """Handle user signup."""
 
     form = Add_user_form()
 
@@ -213,48 +209,26 @@ def show_search_page():
     return render_template('breeds/search.html')
 
 
-@app.route('/search_results', methods=["GET"])
+@app.route('/breed_search_results', methods=["GET"])
 def show_breed_search_results():
     """Display breed info retrieved from breed search and add to breed_picker database."""
-    # Issues:
-    # - How do I query my database so that I can render the template with the data from 
-    # from my database instead of the data returned from the dogs API?
-    
 
     query = request.args.get('breed_search')  # Grabs input from search form
-
     data = search_breeds(query) # Queries dogs API
+    add_breed_search_to_db(query) # Adds response data from dogs API to database 
     
-    add_breed_to_db(query) # Adds response data from dogs API to database 
-    
-    breeds = Breed.query.all()
-    
-    return render_template('/breeds/search_results.html', query=query, data=data, breeds=breeds)  # Shows search results on search_results page
-    
+    return render_template('/breeds/breed_search_results.html', query=query, data=data)  # Shows search results on search_results page
 
-    # Can I somehow retrieve the item from breeds that matches the query and then access the breed_id from there?
-    # breeds = Breed.query.all()
-    # for breed in breeds:
-    #     ids = []
-    #     id = breed.id
-    #     ids.append(id)
-    # print('#################', ids)
-    # for breed in breeds:
-    #     names = []
-    #     name = breed.name
-    #     names.append(name)
-    #     return names
-    # print('########################', names)
-    # breeds_data = dict(zip(ids, names))
-
-
-    # for breed in breeds:
-    #     ids = []
-    #     ids.append(breed[0])
-    #     names = []
-    #     names.append(breed[1])
-    # print('$$$$$$$$$$$$$$$$$$$$$', breeds_data)    
+    
+@app.route('/characteristic_search_results', methods=["GET"])
+def show_characteristic_search_results():
+    """Display characteristic search results retrieved from characteristic search and add to breed_picker database."""
    
+    query = request.args.get('breed_characteristic')
+    data = search_characteristic(query)
+    add_characteristic_search_to_db(query)
+
+    return render_template('/breeds/characteristic_search_results.html', query=query, data=data)
     
 
 
@@ -277,27 +251,50 @@ def show_user_favorites():
     return render_template('/user/my_favorites.html', user=user, user_favorites=user_favorites)
 
 
-@app.route('/user/<name>/favorite', methods=["GET", "POST"])
-def favorite_a_breed(name):
-    """Adds/removes breeds from favorites list."""
 
-    if not g.user:
-        flash('Please login to favorite a breed.', 'danger')
-        return redirect('/')
+# @app.route('/user/<name>/favorite', methods=["GET", 'POST'])
+# def add_breed_to_favorites():
+#     """Adds breed to favorites."""
     
-    favorited_breed = db.session.query(Breed).filter_by(name=name).first()
+#     if not g.user:
+#         flash('Please login to favorite a breed.', 'danger')
+#         return redirect('/')
     
-    # query the breed to see if it is in the 'favorites' table (meaning it has been favorited)
-    user_favorites = g.user.favorites #get the user's favorites
 
-    if favorited_breed in user_favorites:  # if the breed is in the user_favorites list
-        g.user.favorites = [favorite for favorite in user_favorites if favorited_breed != user_favorites]  #if the breed is user_favorites, unfavorite it
-    else:      # else append favorited_breed to g.user.favorites 
-        g.user.favorites.append(favorited_breed)
+#     name = request.args.get('breed_search')
+#     breeds = Breed.query.get(all)
+#     for breed in breeds:
+#         if name == breed.name:
+#             print("########################", breed.id)
+
+
+
+#     for breed in breeds:
+
+#     user_favorites = g.user.favorites
+    
+
+# @app.route('/user/<name>/favorite', methods=["GET", "POST"])
+# def favorite_a_breed(name):
+#     """Adds/removes breeds from favorites list."""
+
+#     if not g.user:
+#         flash('Please login to favorite a breed.', 'danger')
+#         return redirect('/')
+    
+#     favorited_breed = db.session.query(Breed.name).filter_by(name=name)
+    
+#     # query the breed to see if it is in the 'favorites' table (meaning it has been favorited)
+#     user_favorites = g.user.favorites #get the user's favorites
+
+#     if favorited_breed in user_favorites:  # if the breed is in the user_favorites list
+#         g.user.favorites = [favorite for favorite in user_favorites if favorited_breed != user_favorites]  #if the breed is user_favorites, unfavorite it
+#     else:      # else append favorited_breed to g.user.favorites 
+#         g.user.favorites.append(favorited_breed)
        
-    db.session.commit()
+#     db.session.commit()
 
-    return redirect('/user/my_favorites')
+#     return redirect('/user/my_favorites')
 
 ###################################################################################
 # BREED REVIEW ROUTES
