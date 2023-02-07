@@ -215,8 +215,8 @@ def show_breed_search_results():
 
     query = request.args.get('breed_search')  # Grabs input from search form
     data = search_breeds(query) # Queries dogs API
-    add_breed_search_to_db(query) # Adds response data from dogs API to database 
-    
+    add_breed_search_to_db(query) # Adds response data from dogs API to database
+
     return render_template('/breeds/breed_search_results.html', query=query, data=data)  # Shows search results on search_results page
 
     
@@ -246,55 +246,29 @@ def show_user_favorites():
 
     user = g.user
     favorites = Favorite.query.all()
-    user_favorites = user.favorites
+    user_favorites = favorites.user_id
     
     return render_template('/user/my_favorites.html', user=user, user_favorites=user_favorites)
 
 
-
-# @app.route('/user/<name>/favorite', methods=["GET", 'POST'])
-# def add_breed_to_favorites():
-#     """Adds breed to favorites."""
+@app.route('/user/<name>/favorite', methods=["GET", 'POST'])
+def add_breed_to_favorites(name):
+    """Adds breed to favorites."""
     
-#     if not g.user:
-#         flash('Please login to favorite a breed.', 'danger')
-#         return redirect('/')
+    user = g.user
+    print('$$$$$$$$$$$$$$$$$', user.id)
+    name = db.session.query(Breed).filter_by(name=name).first()
+    print('$$$$$$$$$$$$$$$$$', name)
     
+    favorite = Favorite(
+        breeds_name = Breed.name,
+        user_id = user.id
+    )
+   
+    db.session.add(favorite)
+    db.session.commit
+    return render_template('/user/my_favorites.html', name=name, user=user, favorite=favorite)
 
-#     name = request.args.get('breed_search')
-#     breeds = Breed.query.get(all)
-#     for breed in breeds:
-#         if name == breed.name:
-#             print("########################", breed.id)
-
-
-
-#     for breed in breeds:
-
-#     user_favorites = g.user.favorites
-    
-
-# @app.route('/user/<name>/favorite', methods=["GET", "POST"])
-# def favorite_a_breed(name):
-#     """Adds/removes breeds from favorites list."""
-
-#     if not g.user:
-#         flash('Please login to favorite a breed.', 'danger')
-#         return redirect('/')
-    
-#     favorited_breed = db.session.query(Breed.name).filter_by(name=name)
-    
-#     # query the breed to see if it is in the 'favorites' table (meaning it has been favorited)
-#     user_favorites = g.user.favorites #get the user's favorites
-
-#     if favorited_breed in user_favorites:  # if the breed is in the user_favorites list
-#         g.user.favorites = [favorite for favorite in user_favorites if favorited_breed != user_favorites]  #if the breed is user_favorites, unfavorite it
-#     else:      # else append favorited_breed to g.user.favorites 
-#         g.user.favorites.append(favorited_breed)
-       
-#     db.session.commit()
-
-#     return redirect('/user/my_favorites')
 
 ###################################################################################
 # BREED REVIEW ROUTES

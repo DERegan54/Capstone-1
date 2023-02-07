@@ -27,14 +27,12 @@ def search_breeds(query):
 
 def add_breed_search_to_db(query):
     """Adds model instance of breed to database."""
-    # Issues: 
-    # - If there is more than one record returned from the search, how to save all records to the database  
-   
+    # # Issues: 
+    # # - If there is more than one record returned from the search, how to save all records to the database  
     data = search_breeds(query)  # Query dogs API with search input and save response to 'data' variable
     name = data[0]['name']  # Get the 'name' (breed name) attribute from the first record in data and save to 'name' variable to access that record
     exists = db.session.query(Breed.name).filter_by(name=name).first() is not None  # Check if name exists in breed_picker database
     for i in data:     # For each record i in data...
-        name =  i['name']  # (Accessing record through name attribute)
         if exists == False:  # If that record does not exist in breed_picker database....
             breed = Breed(      # Create a model instance called 'breed' from the record data...  
                 image_link = i['image_link'],
@@ -64,7 +62,56 @@ def add_breed_search_to_db(query):
             )
             db.session.add(breed) # add the breed to the breed_picker database
             db.session.commit() # save database changes
+            
             return breed  #return newly created breed record 
+
+
+#  Below is my attempt to add all breeds that are returned from the breed name query to the database:
+
+    # data = search_breeds(query)  # Querys dogs API with search input and saves response to 'data' variable    
+    # names = []  # Creates an empty list to store breed names
+    # for i in data:  # Iterates over the query response data
+    #     values = list(i.values()) # Extracts the values from each of the records in data
+    #     name = values.pop() # Selects the last value in each record, which is 'name'
+    #     names.append(name)   # Saves the name of each breed in data to the names list 
+    # breeds_to_add = []  #  Creates empty list to store breed names that are not already in our database
+    # for name in names:     # For each name in the names list ...
+    #     exists = db.session.query(Breed.name).filter_by(name=name).first() is not None # Checks to see if that breed is already in our database
+    #     if exists == False:  # If that record does not exist in breed_picker database....
+    #         breeds_to_add.append(name)
+    # for name in breeds_to_add:   
+    #     breed_data = search_breeds(name)
+    # print('###################', len(breed_data))
+    # for breed in breed_data:
+    #     breed = Breed(      # Create a model instance called 'breed' from the record data...  
+    #         image_link = breed['image_link'],
+    #         good_with_children = breed['good_with_children'],
+    #         good_with_other_dogs = breed['good_with_other_dogs'],
+    #         shedding = breed['shedding'],
+    #         coat_length = breed['coat_length'],
+    #         trainability = breed['trainability'],
+    #         barking = breed['barking'],
+    #         min_life_expectancy = breed['min_life_expectancy'],
+    #         max_life_expectancy = breed['max_life_expectancy'],
+    #         max_height_male = breed['max_height_male'],
+    #         max_height_female = breed['max_height_female'],
+    #         max_weight_male = breed['max_weight_male'],
+    #         max_weight_female = breed['max_weight_female'],
+    #         min_height_male = breed['min_height_male'],
+    #         min_height_female = breed['min_height_female'],
+    #         min_weight_male = breed['min_weight_male'],
+    #         min_weight_female = breed['min_weight_female'],
+    #         grooming = breed['grooming'],
+    #         drooling = breed['drooling'],
+    #         good_with_strangers = breed['good_with_strangers'],
+    #         playfulness = breed['playfulness'],
+    #         protectiveness = breed['protectiveness'],
+    #         energy = breed['energy'],
+    #         name = breed['name']
+    #     )
+    #     db.session.add(breed) # add the breed to the breed_picker database
+    #     db.session.commit() # save database changes
+    #     return breed  #return newly created breed record 
 
 
 def search_characteristic(breed_characteristic): 

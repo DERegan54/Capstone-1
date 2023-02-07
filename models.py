@@ -38,7 +38,7 @@ class User (db.Model):
     favorites = db.relationship('Favorite', single_parent=True, backref='users', cascade='all, delete-orphan')
 
     def __repr__(self):
-        return f"<User {self.id}: {self.username}, {self.password}"
+        return f"<User {self.id}, {self.username}, {self.password}"
 
     @classmethod
     def signup(cls, username, password, email):
@@ -129,7 +129,7 @@ class Breed (db.Model):
     favorites = db.relationship('Favorite', single_parent=True, backref='breeds', cascade='all, delete-orphan')
     
     def __repr__(self):
-        return f"<Breed {self.id}: {self.name}"
+        return f"{self.name}"
 
 
 class Review (db.Model):
@@ -155,11 +155,9 @@ class Favorite (db.Model):
     
     breeds_name = db.Column(db.Text, db.ForeignKey('breeds.name', ondelete='cascade'), primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'), primary_key=True)
-
-    
     
     def __repr__(self):
-        return f'<Favorites | User {self.user_id} | Breed {self.breed_id}>'
+        return f'{self.user_id}, {self.breed_id}'
 
 
 

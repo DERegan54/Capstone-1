@@ -3,7 +3,7 @@
 {% block content %} 
 <h3>{{user.username}}'s Favorite Breeds:</h3>
 <div class = container>
-    {% for favorite in user.favorites %} 
+    {% for favorite in favorites %} 
     <h3>{{ favorite['name'] }}</h3>
     <br><br>
     <img src="{{ favorite['image_link'] }}">
