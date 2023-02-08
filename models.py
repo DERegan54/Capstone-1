@@ -35,7 +35,8 @@ class User (db.Model):
     # review_id = db.Column(db.Integer, db.ForeignKey('reviews.id', ondelete='cascade'))
 
     reviews = db.relationship('Review', single_parent=True, backref='users', cascade='all, delete-orphan')
-    favorites = db.relationship('Favorite', single_parent=True, backref='users', cascade='all, delete-orphan')
+    # favorites = db.relationship('Favorite', single_parent=True, backref='users', cascade='all, delete-orphan')
+    favorites = db.relationship('Breed', secondary="favorites")
 
     def __repr__(self):
         return f"<User {self.id}, {self.username}, {self.password}"
@@ -55,27 +56,27 @@ class User (db.Model):
         db.session.commit()
         return user
     
-    @classmethod
-    def update_profile(cls, username, password, email, profile_photo, family_members_adults, 
-                       family_members_children, other_pets, environment, experience_level):
-        """ Update user profile and hashes password and adds user to database."""
+    # @classmethod
+    # def update_profile(cls, username, password, email, profile_photo, family_members_adults, 
+    #                    family_members_children, other_pets, environment, experience_level):
+    #     """ Update user profile and hashes password and adds user to database."""
 
-        hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
+    #     hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
 
-        user = User(
-            username=username,
-            password=hashed_pwd,
-            email=email,
-            profile_photo=profile_photo,
-            family_members_adults=family_members_adults,
-            family_members_children=family_members_children,
-            other_pets=other_pets,
-            environment=environment,
-            experience_level=experience_level
-        )
-        db.session.add(user)
+    #     user = User(
+    #         username=username,
+    #         password=hashed_pwd,
+    #         email=email,
+    #         profile_photo=profile_photo,
+    #         family_members_adults=family_members_adults,
+    #         family_members_children=family_members_children,
+    #         other_pets=other_pets,
+    #         environment=environment,
+    #         experience_level=experience_level
+    #     )
+    #     db.session.add(user)
         
-        return user
+    #     return user
             
     @classmethod
     def authenticate(cls, username, password):
@@ -157,8 +158,6 @@ class Favorite (db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id', ondelete='cascade'), primary_key=True)
     
     def __repr__(self):
-        return f'{self.user_id}, {self.breed_id}'
+        return f'<Favorites | User {self.user_id} | Breed {self.breed_id}'
 
-
-
-
+   

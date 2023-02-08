@@ -246,28 +246,31 @@ def show_user_favorites():
 
     user = g.user
     favorites = Favorite.query.all()
-    user_favorites = favorites.user_id
+    user_favorites = user.favorites
     
     return render_template('/user/my_favorites.html', user=user, user_favorites=user_favorites)
 
 
-@app.route('/user/<name>/favorite', methods=["GET", 'POST'])
-def add_breed_to_favorites(name):
+@app.route('/user/<breed_name>/favorite', methods=["GET", 'POST'])
+def add_breed_to_favorites(breed_name):
     """Adds breed to favorites."""
-    
+
     user = g.user
-    print('$$$$$$$$$$$$$$$$$', user.id)
-    name = db.session.query(Breed).filter_by(name=name).first()
-    print('$$$$$$$$$$$$$$$$$', name)
-    
+    user_id = g.user.id
+    user_favorites = g.user.favorites
+    print('$$$$$$$$$$$$$$$$$', user_id)
+    breeds_name = db.session.query(Breed).filter_by(name=breed_name).first()
+    print("$$$$$$$$$$$$$$$$$$$$$", breed_name)
+   
     favorite = Favorite(
-        breeds_name = Breed.name,
-        user_id = user.id
+        breeds_name = breeds_name,
+        user_id = user_id
     )
    
     db.session.add(favorite)
     db.session.commit
-    return render_template('/user/my_favorites.html', name=name, user=user, favorite=favorite)
+   
+    return render_template('/user/my_favorites.html',  favorited_breed=favorited_breed)
 
 
 ###################################################################################
@@ -297,23 +300,24 @@ def show_user_reviews():
     return render_template('user/my_reviews.html', user=user,)  
 
 
-@app.route('/reviews/review_form', methods=["GET"])
+@app.route('/reviews/review_form', methods=["GET", "POST"])
 def show_review_form():
     """Display review form."""
 
     breed = request.args.get('breed_search')
-  
+    
     user = g.user
     form = Breed_review_form()
-   
+
     return render_template('/reviews/add_review.html', user=user, form=form, breed=breed)
+
 
 @app.route('/reviews/add_review', methods=["POST"])
 def add_breed_review():
     """ Add breed review to database.  Redirect to user page. """
 
     form = Breed_review_form()
-
+   
     if form.validate_on_submit():
         review = Review(
             breed_name = form.breed_name.data,

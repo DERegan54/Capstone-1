@@ -12,8 +12,8 @@
         <h2>{{ breed.name }}</h2>
         <br>
         <form >
-            <button formmethod="POST" formaction="/user/{{ breed.name }}/favorite" class="btn btn-secondary" type="submit">Add to Favorites</button> 
-            <button formmethod="GET" formaction="/reviews/review_form" class="btn btn-secondary"  type="submit">Review the {{ breed['name'] }} breed</button>
+            <button formmethod="POST" formaction="/user/{{ breed['name'] }}/favorite" class="btn btn-secondary" type="submit">Add to Favorites</button> 
+            <button formmethod="GET" formaction="reviews/review_form" class="btn btn-secondary"  type="submit">Review the {{ breed['name'] }} breed</button>
         </form>
         <br><br>
         <img src="{{ breed.image_link }}">
