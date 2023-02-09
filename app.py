@@ -236,41 +236,41 @@ def show_characteristic_search_results():
 # FAVORITE ROUTES
 ###################################################################################
 
-@app.route('/user/my_favorites', methods=["GET"])
-def show_user_favorites():
-    """Displays users list of favorite breeds."""
+# @app.route('/user/my_favorites', methods=["GET"])
+# def show_user_favorites():
+#     """Displays users list of favorite breeds."""
 
-    if not g.user:
-        flash("Please login or sign up for an account.", "danger")
-        return redirect('/')
+#     if not g.user:
+#         flash("Please login or sign up for an account.", "danger")
+#         return redirect('/')
 
-    user = g.user
-    favorites = Favorite.query.all()
-    user_favorites = user.favorites
+#     user = g.user
+#     favorites = Favorite.query.all()
+#     user_favorites = user.favorites
     
-    return render_template('/user/my_favorites.html', user=user, user_favorites=user_favorites)
+#     return render_template('/user/my_favorites.html', user=user, user_favorites=user_favorites)
 
 
-@app.route('/user/<breed_name>/favorite', methods=["GET", 'POST'])
-def add_breed_to_favorites(breed_name):
-    """Adds breed to favorites."""
+# @app.route('/user/<breed_name>/favorite', methods=["GET", 'POST'])
+# def add_breed_to_favorites(breed_name):
+#     """Adds breed to favorites."""
 
-    user = g.user
-    user_id = g.user.id
-    user_favorites = g.user.favorites
-    print('$$$$$$$$$$$$$$$$$', user_id)
-    breeds_name = db.session.query(Breed).filter_by(name=breed_name).first()
-    print("$$$$$$$$$$$$$$$$$$$$$", breed_name)
+#     user = g.user
+#     user_id = g.user.id
+#     user_favorites = g.user.favorites
+#     print('$$$$$$$$$$$$$$$$$', user_id)
+#     breeds_name = db.session.query(Breed).filter_by(name=breed_name).first()
+#     print("$$$$$$$$$$$$$$$$$$$$$", breed_name)
    
-    favorite = Favorite(
-        breeds_name = breeds_name,
-        user_id = user_id
-    )
+#     favorite = Favorite(
+#         breeds_name = breeds_name,
+#         user_id = user_id
+#     )
    
-    db.session.add(favorite)
-    db.session.commit
+#     db.session.add(favorite)
+#     db.session.commit
    
-    return render_template('/user/my_favorites.html',  favorited_breed=favorited_breed)
+#     return render_template('/user/my_favorites.html',  favorited_breed=favorited_breed)
 
 
 ###################################################################################
@@ -300,7 +300,7 @@ def show_user_reviews():
     return render_template('user/my_reviews.html', user=user,)  
 
 
-@app.route('/reviews/review_form', methods=["GET", "POST"])
+@app.route('/reviews/review_form', methods=["GET"])
 def show_review_form():
     """Display review form."""
 
@@ -314,7 +314,7 @@ def show_review_form():
 
 @app.route('/reviews/add_review', methods=["POST"])
 def add_breed_review():
-    """ Add breed review to database.  Redirect to user page. """
+    """ Add breed review to database.  Redirect to my_reviews page. """
 
     form = Breed_review_form()
    
