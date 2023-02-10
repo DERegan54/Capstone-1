@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from secrets import API_KEY
 from sqlalchemy.exc import IntegrityError
-from forms import Add_user_form, Login_Form, Edit_profile_form, Breed_review_form, Delete_form, Breed_name_form
+from forms import Add_user_form, Login_Form, Edit_profile_form, Breed_review_form, Delete_form
 from models import db, connect_db, User, Breed, Review, Favorite 
 from user import login_user, logout_user
 from api_requests import add_breed_search_to_db, add_characteristic_search_to_db, search_breeds, search_characteristic
@@ -134,10 +134,8 @@ def show_user_profile():
         return redirect('/')
 
     user = g.user
-    
-    favorites = Favorite.query.all()   
 
-    return render_template('user/my_profile.html', user=user, favorites=favorites)
+    return render_template('user/my_profile.html', user=user)
    
 
 @app.route('/user/edit_form', methods=["GET"])
@@ -213,70 +211,53 @@ def show_search_page():
 def show_breed_search_results():
     """Display breed info retrieved from breed search and add to breed_picker database."""
 
-    username = g.user.username
     query = request.args.get('breed_search')  # Grabs input from search form
     data = search_breeds(query) # Queries dogs API
     add_breed_search_to_db(query) # Adds response data from dogs API to database
 
-    return render_template('/breeds/breed_search_results.html', username=username, query=query, data=data)  # Shows search results on search_results page
+    return render_template('/breeds/breed_search_results.html', query=query, data=data)  # Shows search results on search_results page
 
     
 @app.route('/characteristic_search_results', methods=["GET"])
 def show_characteristic_search_results():
     """Display characteristic search results retrieved from characteristic search and add to breed_picker database."""
-   
-    username = g.user.username
+  
     query = request.args.get('breed_characteristic')
     data = search_characteristic(query)
     add_characteristic_search_to_db(query)
 
-    return render_template('/breeds/characteristic_search_results.html', username=username, query=query, data=data)
-    
+    return render_template('/breeds/characteristic_search_results.html', query=query, data=data)
 
 
 ###################################################################################
 # FAVORITE ROUTES
 ###################################################################################
 
-@app.route('/<username>/my_favorites', methods=["GET"])
-def show_user_favorites():
-    """Displays users list of favorite breeds."""
+# @app.route('/user/my_favorites', methods=["GET"])
+# def show_user_favorites():
+#     """Displays users list of favorite breeds."""
 
-    if not g.user:
-        flash("Please login or sign up for an account.", "danger")
-        return redirect('/')
+#     if not g.user:
+#         flash("Please login or sign up for an account.", "danger")
+#         return redirect('/')
 
-    user = g.user
-    user_id = g.user.id
-    print('#############', user_id)
-    username = user.username
-    print("###############", username)
-    favorites = Favorite.query.all()
+#     user_id = g.user.id
+#     favorites = Favorite.query.all()
 
-    return render_template('/user/my_favorites.html', user_id=user_id, favorites=favorites)
+#     return render_template('/user/my_favorites.html', user_id=user_id, favorites=favorites)
 
+# @app.route('/user/<breed_name>/add_favorite', methods=["POST"])
+# def add_favorite(breed_name):
+#     """Add breed to favorites."""
 
-@app.route('/<username>/<breed_name>/add_favorite', methods=["GET", 'POST'])
-def add_breed_to_favorites(breed_name):
-    """Adds breed to favorites."""
-    
-    username = g.user.username
-    user_id = g.user.id
-    # user_favorites = g.user.favorites
-    print('$$$$$$$$$$$$$$$$$ USER ID', user_id)
-    breed_name = db.session.query(Breed).filter_by(name=breed_name).first()
-    print("$$$$$$$$$$$$$$$$$$$$$ BREED NAME", breed_name)
-    favorites = Favorite.query.all()
-    favorite = Favorite(
-        breeds_name = breed_name,
-        user_id = user_id
-    )
-   
-    db.session.add(favorite)
-    db.session.commit
-   
-    return 
-    # return render_template('/user/my_favorites.html',  user_id=user_id, favorite=favorite, favorites=favorites)
+#     user_id = g.user.id
+
+#     favorite = Favorite.add_breed_to_favorites(breed_name, user_id)
+
+#     favorites = Favorite.query.all()
+
+#     return render_template('/user/my_favorites.html', user_id=user_id, favorite=favorite, favorites=favorites)
+
 
 
 ###################################################################################

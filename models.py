@@ -56,27 +56,6 @@ class User (db.Model):
         db.session.commit()
         return user
     
-    # @classmethod
-    # def update_profile(cls, username, password, email, profile_photo, family_members_adults, 
-    #                    family_members_children, other_pets, environment, experience_level):
-    #     """ Update user profile and hashes password and adds user to database."""
-
-    #     hashed_pwd = bcrypt.generate_password_hash(password).decode('UTF-8')
-
-    #     user = User(
-    #         username=username,
-    #         password=hashed_pwd,
-    #         email=email,
-    #         profile_photo=profile_photo,
-    #         family_members_adults=family_members_adults,
-    #         family_members_children=family_members_children,
-    #         other_pets=other_pets,
-    #         environment=environment,
-    #         experience_level=experience_level
-    #     )
-    #     db.session.add(user)
-        
-    #     return user
             
     @classmethod
     def authenticate(cls, username, password):
@@ -159,5 +138,21 @@ class Favorite (db.Model):
     
     def __repr__(self):
         return f'<Favorites | User {self.user_id} | Breed {self.breed_id}'
+
+    # @classmethod
+    # def add_breed_to_favorites(breed_name, user_id):
+    #     """Adds breed to favorites."""
+        
+    #     user_id = User.id
+
+    #     favorite = Favorite(
+    #         breeds_name = breed_name,
+    #         user_id = user_id
+    #     )
+   
+    #     db.session.add(favorite)
+    #     db.session.commit()
+        
+    #     return favorite
 
    

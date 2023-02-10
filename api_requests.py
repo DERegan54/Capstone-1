@@ -81,7 +81,7 @@ def search_characteristic(breed_characteristic):
             return data 
     elif breed_characteristic =='shedding':
         url = f'{API_BASE_URL}shedding=1'
-        url2 = f'{API_BASE_URL}shedding-1;offset=20'
+        url2 = f'{API_BASE_URL}shedding=1;offset=20'
         response = requests.get(url, headers={'X-Api-Key': API_KEY})
         response2 = requests.get(url2, headers={'X-Api-Key': API_KEY})
         data = response.json()
