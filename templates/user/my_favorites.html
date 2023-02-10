@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %} 
+
 <h3>{{user.username}}'s Favorite Breeds:</h3>
-<div class = container>
+<div class="container">
     {% for favorite in favorites %} 
     <h3>{{ favorite['name'] }}</h3>
     <br><br>
