@@ -1,7 +1,8 @@
 from flask import request
-from secrets import API_KEY
 from models import db, Breed
 import requests
+import os
+API_KEY = os.environ.get('API_KEY')
 
 API_BASE_URL = 'https://api.api-ninjas.com/v1/dogs?'
 

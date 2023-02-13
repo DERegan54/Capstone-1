@@ -5,17 +5,17 @@
 
 from unittest import TestCase
 from sqlalchemy import exc
-from secrets import API_KEY
+
 from models import db, User, Breed, Review, Favorite
 from user import login_user, logout_user
 from api_requests import add_breed_search_to_db, add_characteristic_search_to_db, search_breeds, search_characteristic
-
+import os
 # testing database
 # set this before importing the app
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///breed_picker_test'
 app.config['TESTING'] = True
 app.config['DEBUG_TB_HOSTS'] = ['dont-show-debug-toolbar']
-
+API_KEY = os.environ.get('API_KEY')
 API_BASE_URL = 'https://api.api-ninjas.com/v1/dogs?'
 
 from app import app

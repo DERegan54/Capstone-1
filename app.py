@@ -1,18 +1,18 @@
 from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
-from secrets import API_KEY
+# from secrets import API_KEY
 from sqlalchemy.exc import IntegrityError
 from forms import Add_user_form, Login_Form, Edit_profile_form, Breed_review_form, Delete_form
 from models import db, connect_db, User, Breed, Review, Favorite 
 from user import login_user, logout_user
 from api_requests import add_breed_search_to_db, add_characteristic_search_to_db, search_breeds, search_characteristic
 import requests
-
+import os
 
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///breed_picker'
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_TRACK_MODIFICATION'] = False
 app.config['SQLALCHEMY_ECHO'] = True
 app.config['SECRET_KEY'] = "SHHHHHHH....SECRET!!!"
@@ -23,7 +23,7 @@ debug = DebugToolbarExtension(app)
 connect_db(app)
 
 API_BASE_URL = 'https://api.api-ninjas.com/v1/dogs?'
-
+API_KEY = os.environ.get('API_KEY')
 
 ###################################################################################
 # ROOT ROUTE
